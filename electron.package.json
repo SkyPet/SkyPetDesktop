@@ -69,7 +69,6 @@
 			"!package.json",
 			"!src",
 			"!coverage",
-			"!package.json",
 			"!postProcess.js",
 			"!copyPackage.js",
 			"!SkyPetGUI",
