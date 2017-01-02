@@ -10,7 +10,6 @@ let SkyPetApi;
 let menu;
 let template;
 let mainWindow = null;
-
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support'); // eslint-disable-line
   sourceMapSupport.install();
@@ -43,8 +42,8 @@ app.on('ready', () => {
     mainWindow.focus();
     const GetGeth=require('./modules/downloadGeth').GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
       if(!locationOfBinary){
-        console.log(err);
-        app.quit();
+        //console.log(err);
+        return app.quit();
       }
       const skypet=require('./modules/skypetapi').SkyPetApi;//(ipcMain);
       SkyPetApi=new skypet(ipcMain, mainWindow.webContents, locationOfBinary);

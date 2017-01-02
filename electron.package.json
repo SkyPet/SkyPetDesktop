@@ -40,7 +40,8 @@
 		"electron-config": "^0.2.1",
 		"skypetwrapper": "^1.2.2",
 		"fs-extra": "^2.0.0",
-		"unzip": "^0.1.11",
+		"extract-zip": "^1.6.0",
+		"simple-node-logger": "^0.93.14",
 		"tar.gz": "^1.0.5"
 	},
 	"devDependencies": {

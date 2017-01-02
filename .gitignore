@@ -1,6 +1,4 @@
-npm-debug.log
 .vscode
-debug.log
 SkyPetGUI
 SkyPetSmartContractWrapper
 node_modules
@@ -11,3 +9,4 @@ public
 build
 build-react
 coverage
+*.log
