@@ -41,7 +41,7 @@
 		"skypetwrapper": "^1.2.2",
 		"fs-extra": "^2.0.0",
 		"extract-zip": "^1.6.0",
-		"simple-node-logger": "^0.93.14",
+		"electron-log": "^1.3.0",
 		"tar.gz": "^1.0.5"
 	},
 	"devDependencies": {

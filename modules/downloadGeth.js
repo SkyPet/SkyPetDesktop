@@ -3,7 +3,8 @@ const path=require('path');
 const fs=require('fs-extra');
 const nodeZip=require('extract-zip');
 const targz=require('tar.gz');
-const log=require('simple-node-logger').createSimpleLogger('SkyPet.log');
+const log=require('electron-log');
+log.transports.file.level='info';
 const zipUtils={
     zip:"zip",
     tar:"tar.gz"
