@@ -43,11 +43,11 @@ app.on('ready', () => {
     mainWindow.show();
     mainWindow.focus();
     
-    const GetGeth=require(path.resolve('.', 'modules', 'downloadGeth')).GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
+    const GetGeth=require('./modules/downloadGeth').GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
       if(!locationOfBinary){
         return app.quit();
       }
-      const skypet=require(path.resolve('.', 'modules', 'skypetapi')).SkyPetApi;//(ipcMain);
+      const skypet=require('./modules/skypetapi').SkyPetApi;//(ipcMain);
       SkyPetApi=new skypet(ipcMain, mainWindow.webContents, locationOfBinary);
     });
   });
