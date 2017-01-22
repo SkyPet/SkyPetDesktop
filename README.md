@@ -7,7 +7,7 @@ This will create a "package.json" with the necessary dependencies and scripts.  
 
 `npm install`
 
-Now we build the client GUI html and prepare everything for electron. 
+Now we build the client GUI html and prepare everything for electron. Note that this generates the html into "build-react" instead of "build".
 
 `npm run build-electron-react`
 

@@ -7,9 +7,11 @@
   "scripts": {
     "start-electron": "cross-env NODE_ENV='development' electron .",
     "start-react":"cross-env REACT_APP_ELECTRON='true' react-scripts start",
-    "build-electron-react":"npm run copy-package && npm run rm-public && npm run rm-src && npm run copy-src && npm run copy-public && cross-env REACT_APP_ELECTRON='true' npm run build && npm run post-process-react",
+    "build-electron-react":"rm -r build-react && rm -r build && npm run copy-package && npm run rm-public && npm run rm-src && npm run copy-src && npm run copy-public && cross-env REACT_APP_ELECTRON='true' npm run build && npm run post-process-react && npm run rename-client-build && npm run copy-icon",
     "post-process-react":"node postProcess.js",
     "rm-src":"rm -r src",
+    "rename-client-build":"mv build build-react",
+    "copy-icon":"mkdir build && mv build-react/background.png build && mv build-react/icon.icns build && mv build-react/icon.ico build",
     "rm-public":"rm -r public",
     "copy-src": "cp -r ../../htmlApps/SkyPetGUI/src src",
     "copy-public": "cp -r ../../htmlApps/SkyPetGUI/public public",

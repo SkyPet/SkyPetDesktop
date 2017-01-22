@@ -80,7 +80,7 @@ app.on('ready', () => {
     height: 728
   });
 
-  mainWindow.loadURL(`file://${__dirname}/build/electronIndex.html`);
+  mainWindow.loadURL(`file://${__dirname}/build-react/electronIndex.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();
@@ -252,7 +252,7 @@ app.on('ready', () => {
       }]
     }, {
       label: '&View',
-      submenu: (process.env.NODE_ENV === 'development') ? [{
+      submenu: (/*process.env.NODE_ENV === 'development'*/true) ? [{
         label: '&Reload',
         accelerator: 'Ctrl+R',
         click() {
