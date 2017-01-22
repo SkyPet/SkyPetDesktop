@@ -1,10 +1,10 @@
 const Web3 = require('web3');
 const os=require('os');
-const spawn = require('child_process').spawn;
+const child_process = require('child_process');//.spawn;
 const uuid = require('node-uuid');
 const Config = require('electron-config');
 const config = new Config();
-const exec = require( 'child_process' ).exec;
+//const exec = require( 'child_process' ).exec;
 var CryptoJS = require("crypto-js");
 const url = require('url');
 const path = require('path');
@@ -24,6 +24,7 @@ const datadir='--datadir '+getGethPath('geth/lightchaindata', testing);
 const gethCommand=process.platform === 'darwin'?`${__dirname}/geth-mac`:process.platform==='win32'?`${__dirname}/geth-windows`:`${__dirname}/geth`;
 const contractAddress='0x72c1bba9cabab4040c285159c8ea98fd36372858'; //please chnage this back to 
 
+console.log(gethCommand);
 
 const parseResults=(result)=>{ 
     //result is an object.  if data is encrypted, MUST have an "addedEncryption" key.
@@ -118,7 +119,7 @@ function runWeb3(event, cb){
 }
 
 const runGeth=(password, event,  cb)=>{
-  exec(gethCommand+' --exec "personal.unlockAccount(eth.accounts[0], \''+password+'\', 0)" attach ipc:'+ipcPath, (err, stdout, stderr)=>{
+  child_process.exec(gethCommand+' --exec "personal.unlockAccount(eth.accounts[0], \''+password+'\', 0)" attach ipc:'+ipcPath, (err, stdout, stderr)=>{
       stdout=stdout.trim();
       if(err||(stdout!=="true")){
           return event.sender.send("passwordError", err);
@@ -132,7 +133,7 @@ const runGeth=(password, event,  cb)=>{
 }
 const createAccount=(password, cb)=>{
     config.set('hasAccount', true);
-    exec(gethCommand+' --exec "personal.newAccount('+password+')"', (err, stdout, stderr)=>{
+    child_process.exec(gethCommand+' --exec "personal.newAccount('+password+')"', (err, stdout, stderr)=>{
         if(!err){
             config.set('hasAccount', true);
         }
@@ -143,7 +144,7 @@ const checkAccount=()=>{
     return config.get('hasAccount');
 }
 const checkPswd=(event)=>{
-  exec(gethCommand+' '+datadir+'  account list', (err, stdout, stderr)=>{
+  child_process.exec(gethCommand+' '+datadir+'  account list', (err, stdout, stderr)=>{
         if(err||!stdout){
             config.set('hasAccount', false);
         }
@@ -181,7 +182,7 @@ const getIds=()=>{
 }
 const getEthereumStart=(event)=>{
     
-    const geth = spawn(gethCommand, ['--rpc', '--testnet', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath]);
+    const geth = child_process.spawn(gethCommand, ['--rpc', '--testnet', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath]);
 
     var isFirst=true;
     geth.stdout.on('data', (data) => {

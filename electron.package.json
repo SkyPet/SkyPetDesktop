@@ -40,8 +40,10 @@
     },
     "win": {
       "iconUrl": "http://image.flaticon.com/icons/png/512/12/12638.png"
-    }
+    },
+    "asar":false
   },
+  
   "homepage": "./",
   "bin": {
     "electron": "./node_modules/.bin/electron"
