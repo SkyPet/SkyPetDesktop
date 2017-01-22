@@ -20,3 +20,11 @@ To do any GUI edits edit SkyPetGUI and NOT THE COPIED GUI that is in "src" and "
 Any additional server edits requires a rebuild, which means just rerunning 
 
 `npm run build-electron-react`
+
+##Production/Binary
+
+To create a distributable binary, on Ubuntu first do:
+
+`sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils`
+
+Then `npm run dist`
