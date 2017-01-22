@@ -1,5 +1,17 @@
-import { app, BrowserWindow, Menu, shell, ipcMain} from 'electron';
-import {getEthereumStart, addAttribute, getIds, runGeth} from './eth';
+const electron = require('electron');
+const eth=require('./eth');
+const app=electron.app;
+const BrowserWindow=electron.BrowserWindow;
+const Menu=electron.Menu;
+const shell=electron.shell;
+const ipcMain=electron.ipcMain;
+const getEthereumStart=eth.getEthereumStart;
+const addAttribute=eth.addAttribute;
+const getAttributes=eth.getAttributes;
+const getIds=eth.getIds;
+const runGeth=eth.runGeth;
+//import { app, BrowserWindow, Menu, shell, ipcMain} from 'electron';
+//import {getEthereumStart, addAttribute, getIds, runGeth} from './eth';
 
 let menu;
 let template;
@@ -9,15 +21,20 @@ ipcMain.on('startEthereum', (event, arg)=>{
   getEthereumStart(event);
 })
 ipcMain.on('password', (event, arg)=>{
-  runGeth(arg, event, (contract)=>{
-    const Ids=getIds();
-    event.sender.send('petId', Ids.hashId);
-    ipcMain.on('addAttribute', (event, arg) => {
-      getAttributes(contract, JSON.stringify(arg),Ids.hashId, Ids.unHashedId, event);
-    });
-  })
+  runGeth(arg, event, 
+    (contract)=>{
+      const Ids=getIds();
+      event.sender.send('petId', Ids.hashId);
+      getAttributes(contract, Ids.hashId, Ids.unHashedId, event);
+      ipcMain.on('addAttribute', (attrEvent, attrArg) => {
+        addAttribute(contract, JSON.stringify(attrArg),Ids.hashId, Ids.unHashedId, attrEvent);
+      });
+    }
+  );
 })
-  
+
+
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support'); // eslint-disable-line
   sourceMapSupport.install();
@@ -35,7 +52,7 @@ app.on('window-all-closed', () => {
 });
 
 
-const installExtensions = async () => {
+/*const installExtensions = async () => {
   if (process.env.NODE_ENV === 'development') {
     const installer = require('electron-devtools-installer'); // eslint-disable-line global-require
 
@@ -51,9 +68,10 @@ const installExtensions = async () => {
     }
   }
 };
+*/
 
-app.on('ready', async () => {
-  await installExtensions();
+app.on('ready', () => {
+ // await installExtensions();
   
   //var subpy = require('child_process').spawn('geth', ['--rpc --testnet --datadir=$HOME/.ethereum --light --ipcpath=$HOME/.ethereum/testnet/geth.ipc --verbosity=3']);
   mainWindow = new BrowserWindow({
@@ -62,7 +80,7 @@ app.on('ready', async () => {
     height: 728
   });
 
-  mainWindow.loadURL(`file://${__dirname}/app.html`);
+  mainWindow.loadURL(`file://${__dirname}/build/electronIndex.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();

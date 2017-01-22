@@ -3,9 +3,14 @@
   "version": "0.0.1",
   "main": "main.js",
   "scripts": {
-    "start-electron": "electron .",
-    "copy-src": "cp -r ../../htmlApps/SkyPetGUI/src /src",
-    "copy-public": "cp -r ../../htmlApps/SkyPetGUI/public /public",
+    "start-electron": "cross-env NODE_ENV='development' electron .",
+    "start-react":"cross-env REACT_APP_ELECTRON='true' react-scripts start",
+    "build-electron-react":"npm run copy-package && npm run rm-public && npm run rm-src && npm run copy-src && npm run copy-public && cross-env REACT_APP_ELECTRON='true' npm run build && npm run post-process-react",
+    "post-process-react":"node postProcess.js",
+    "rm-src":"rm -r src",
+    "rm-public":"rm -r public",
+    "copy-src": "cp -r ../../htmlApps/SkyPetGUI/src src",
+    "copy-public": "cp -r ../../htmlApps/SkyPetGUI/public public",
     "copy-package": "node copyPackage.js"
   },
   "dependencies": {
@@ -17,8 +22,10 @@
     "electron": "^1.4.15",
     "electron-config": "^0.2.1",
     "electron-devtools-installer": "^2.0.1",
+    "electron-debug": "^1.1.0",
     "react-scripts": "0.8.5"
   },
+  "homepage": "./",
   "bin": {
     "electron": "./node_modules/.bin/electron"
   }

@@ -66,7 +66,7 @@ const getAttributes=(contract, hashId, unHashedId, event)=>{
     });
 }
 
-export const addAttribute=(contract, message, hashId, unHashedId, event)=>{
+const addAttribute=(contract, message, hashId, unHashedId, event)=>{
     contract.costToAdd((err1, cost)=>{
         web3.eth.getBalance(web3.eth.defaultAccount, (err2, balance)=>{
             if(cost.greaterThan(balance)){
@@ -117,19 +117,20 @@ function runWeb3(event, cb){
     });
 }
 
-export const runGeth=(password, event,  cb)=>{
+const runGeth=(password, event,  cb)=>{
   exec(gethCommand+' --exec "personal.unlockAccount(eth.accounts[0], \''+password+'\', 0)" attach ipc:'+ipcPath, (err, stdout, stderr)=>{
       stdout=stdout.trim();
       if(err||(stdout!=="true")){
-          return console.log(err||stdout);
+          return event.sender.send("passwordError", err);
       }
       else{
           console.log("open");
+          event.sender.send("successLogin", "p")
           runWeb3(event, cb);
       }
   });
 }
-export const createAccount=(password, cb)=>{
+const createAccount=(password, cb)=>{
     config.set('hasAccount', true);
     exec(gethCommand+' --exec "personal.newAccount('+password+')"', (err, stdout, stderr)=>{
         if(!err){
@@ -138,51 +139,21 @@ export const createAccount=(password, cb)=>{
         cb(err, stdout);
     });
 }
-export const checkAccount=()=>{
+const checkAccount=()=>{
     return config.get('hasAccount');
 }
 const checkPswd=(event)=>{
-  //const pswd=path.join(__dirname, passwordFileName);
   exec(gethCommand+' '+datadir+'  account list', (err, stdout, stderr)=>{
         if(err||!stdout){
             config.set('hasAccount', false);
         }
-            /*var value=uuid.v1().replace(/-/g, "");
-            
-            fs.writeFile(pswd, value, (err)=>{
-                if(err) {
-                    return console.log(err);
-                }
-                //exec(gethCommand+' '+datadir+' --password '+passwordFileName+' account new', (err, stdout, stderr)=>{
-                exec(gethCommand+' --exec "personal.newAccount("password")"', (err, stdout, stderr)=>{
-                    if(err){
-                        return console.log(err);
-                    }
-                    runGeth(value,event, ipcPath, web3, cb);
-                });
-            });
-        }*/
         else{
             config.set('hasAccount', true);
             event.sender.send('hasAccount', "p");
-            /*config.has('password', )
-            fs.readFile(pswd, 'utf8', (err, data)=>{
-                if(err){
-                    return console.log(err);
-                }
-                runGeth(data, event, ipcPath, web3, cb);
-            });*/
         }
         
     });
 }
-/*const getHeaders=(data)=>{
-    const headerIndex=data.indexOf("headers");
-    const numHeaders=data.substring(headerIndex-4, headerIndex).trim();
-    //console.log(numHeaders);
-    return numHeaders?parseFloat(numHeaders):100;
-
-}*/
 const getSync=(event, cb)=>{
     web3.eth.isSyncing((error, sync)=>{
         console.log(error);
@@ -202,13 +173,13 @@ const getSync=(event, cb)=>{
         }
     });
 }
-export const getIds=()=>{
+const getIds=()=>{
     return {
         unHashedId:"MyId4",
         hashId:web3.sha3("MyId4")
     }
 }
-export const getEthereumStart=(event)=>{
+const getEthereumStart=(event)=>{
     
     const geth = spawn(gethCommand, ['--rpc', '--testnet', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath]);
 
@@ -223,13 +194,6 @@ export const getEthereumStart=(event)=>{
             web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
             getSync( event, ()=>{
                 checkPswd( event);
-                /*if(testing){
-                    const Ids=getIds();
-                    checkPswd(event);
-                }
-                else{
-                    checkPswd( event);
-                }*/
             })
             
             isFirst=false;
@@ -240,3 +204,12 @@ export const getEthereumStart=(event)=>{
         console.log(`child process exited with code ${code}`);
     });  
 }
+
+
+exports.addAttribute=addAttribute;
+exports.getAttributes=getAttributes;
+exports.getEthereumStart=getEthereumStart;
+exports.getIds=getIds;
+exports.createAccount=createAccount;
+exports.checkAccount=checkAccount;
+exports.runGeth=runGeth;
