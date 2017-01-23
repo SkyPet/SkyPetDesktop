@@ -198,12 +198,16 @@ const getIds=()=>{
 const getEthereumStart=(event)=>{
     //config.set('hasAccount', false);
     console.log(checkAccount());
-    const geth = child_process.execFile(gethCommand, ['--rpc', '--testnet', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal,web3"']);
-
+    const geth = child_process.execFile(gethCommand, ['--rpc', '--testnet', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal,web3"']);//, (err, stdout, stderr)=>{
+        //console.log(err);
+        //console.log(stderr)
+       
+    //});
     var isFirst=true;
+    /*
     geth.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
-    });
+    });*/
     
     geth.stderr.on('data', (data) => {
         if(isFirst){
