@@ -10,6 +10,8 @@ const addAttribute=eth.addAttribute;
 const getAttributes=eth.getAttributes;
 const getIds=eth.getIds;
 const runGeth=eth.runGeth;
+const checkAccount=eth.checkAccount;
+const createAccount=eth.createAccount;
 //import { app, BrowserWindow, Menu, shell, ipcMain} from 'electron';
 //import {getEthereumStart, addAttribute, getIds, runGeth} from './eth';
 
@@ -21,16 +23,21 @@ ipcMain.on('startEthereum', (event, arg)=>{
   getEthereumStart(event);
 })
 ipcMain.on('password', (event, arg)=>{
-  runGeth(arg, event, 
-    (contract)=>{
-      const Ids=getIds();
-      event.sender.send('petId', Ids.hashId);
-      getAttributes(contract, Ids.hashId, Ids.unHashedId, event);
-      ipcMain.on('addAttribute', (attrEvent, attrArg) => {
-        addAttribute(contract, JSON.stringify(attrArg),Ids.hashId, Ids.unHashedId, attrEvent);
-      });
-    }
-  );
+  const onContract=(contract)=>{
+    const Ids=getIds();
+    event.sender.send('petId', Ids.hashId);
+    getAttributes(contract, Ids.hashId, Ids.unHashedId, event);
+    ipcMain.on('addAttribute', (attrEvent, attrArg) => {
+      addAttribute(contract, JSON.stringify(attrArg),Ids.hashId, Ids.unHashedId, attrEvent);
+    });
+  }
+  if(checkAccount()){
+    runGeth(arg, event, onContract);
+  }
+  else{
+    createAccount(arg, event, onContract);
+  }
+  
 })
 
 
