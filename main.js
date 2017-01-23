@@ -10,6 +10,7 @@ const addAttribute=eth.addAttribute;
 const getAttributes=eth.getAttributes;
 const getIds=eth.getIds;
 const runGeth=eth.runGeth;
+const closeGeth=eth.closeGeth;
 const checkAccount=eth.checkAccount;
 const createAccount=eth.createAccount;
 //import { app, BrowserWindow, Menu, shell, ipcMain} from 'electron';
@@ -96,6 +97,8 @@ app.on('ready', () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+    closeGeth();
+
   });
 
   if (process.env.NODE_ENV === 'development') {

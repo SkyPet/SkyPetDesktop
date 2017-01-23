@@ -10,6 +10,7 @@ const url = require('url');
 const path = require('path');
 const testing=true;
 const gethPath=process.env.gethPath?process.env.gethPath:os.homedir()+"/.ethereum/";
+let geth;
 const gethLocations={
   production:gethPath,
   testing:gethPath+'testnet/'
@@ -198,11 +199,14 @@ const getIds=()=>{
 const getEthereumStart=(event)=>{
     //config.set('hasAccount', false);
     console.log(checkAccount());
-    const geth = child_process.execFile(gethCommand, ['--rpc', '--testnet', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal,web3"']);//, (err, stdout, stderr)=>{
+    geth = child_process.spawn(gethCommand, ['--rpc', '--testnet', '--datadir='+getGethPath("", false), '--light', '--ipcpath='+ipcPath, '--rpcapi="db,eth,net,web3,personal,web3"']);//, (err, stdout, stderr)=>{
         //console.log(err);
         //console.log(stderr)
        
     //});
+    /*geth.on('message', (msg)=>{
+        console.log(msg);
+    })*/
     var isFirst=true;
     /*
     geth.stdout.on('data', (data) => {
@@ -226,7 +230,9 @@ const getEthereumStart=(event)=>{
     });  
 }
 
-
+const closeGeth=()=>{
+    geth.kill();
+}
 exports.addAttribute=addAttribute;
 exports.getAttributes=getAttributes;
 exports.getEthereumStart=getEthereumStart;
@@ -234,3 +240,4 @@ exports.getIds=getIds;
 exports.createAccount=createAccount;
 exports.checkAccount=checkAccount;
 exports.runGeth=runGeth;
+exports.closeGeth=closeGeth;
