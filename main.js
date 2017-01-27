@@ -1,19 +1,14 @@
-const electron = require('electron');
-const eth=require('./eth');
+const tryRequire = require('try-require');
+//const electron = tryRequire('electron');
+const electron=require('electron');
+
 const app=electron.app;
 const BrowserWindow=electron.BrowserWindow;
 const Menu=electron.Menu;
 const shell=electron.shell;
 const ipcMain=electron.ipcMain;
-const getEthereumStart=eth.getEthereumStart;
-const addAttribute=eth.addAttribute;
-const getAttributes=eth.getAttributes;
-const getIds=eth.getIds;
-//const runGeth=eth.runGeth;
-const closeGeth=eth.closeGeth;
-const checkAccount=eth.checkAccount;
-const createAccount=eth.createAccount;
-const runWeb3=eth.runWeb3;
+const skypet=require('./skypetapi');
+const SkyPetApi=skypet.SkyPetApi(ipcMain);
 //import { app, BrowserWindow, Menu, shell, ipcMain} from 'electron';
 //import {getEthereumStart, addAttribute, getIds, runGeth} from './eth';
 
@@ -21,20 +16,7 @@ let menu;
 let template;
 let mainWindow = null;
 
-ipcMain.on('startEthereum', (event, arg)=>{
-  getEthereumStart(event);
-})
-ipcMain.on('password', (event, arg)=>{
-  if(!checkAccount()){
-    createAccount(arg, event);
-  }
-  else{
-    checkPassword(arg, event);
-  }
-})
-ipcMain.on('addAttribute', (attrEvent, attrArg) => {
-    addAttribute(contract, JSON.stringify(attrArg),Ids.hashId, Ids.unHashedId, attrEvent);
-});
+
 /*ipcMain.on('mainPage', (event, arg)=>{
   const onContract=(contract)=>{
     const Ids=getIds();
@@ -71,28 +53,7 @@ app.on('window-all-closed', () => {
 });
 
 
-/*const installExtensions = async () => {
-  if (process.env.NODE_ENV === 'development') {
-    const installer = require('electron-devtools-installer'); // eslint-disable-line global-require
-
-    const extensions = [
-      'REACT_DEVELOPER_TOOLS',
-      'REDUX_DEVTOOLS'
-    ];
-    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    for (const name of extensions) { // eslint-disable-line
-      try {
-        await installer.default(installer[name], forceDownload);
-      } catch (e) {} // eslint-disable-line
-    }
-  }
-};
-*/
-
 app.on('ready', () => {
- // await installExtensions();
-  
-  //var subpy = require('child_process').spawn('geth', ['--rpc --testnet --datadir=$HOME/.ethereum --light --ipcpath=$HOME/.ethereum/testnet/geth.ipc --verbosity=3']);
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
@@ -108,7 +69,7 @@ app.on('ready', () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
-    closeGeth();
+    SkyPetApi.close();
 
   });
 
