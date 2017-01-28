@@ -7,34 +7,12 @@ const BrowserWindow=electron.BrowserWindow;
 const Menu=electron.Menu;
 const shell=electron.shell;
 const ipcMain=electron.ipcMain;
-const skypet=require('./skypetapi');
-const SkyPetApi=skypet.SkyPetApi(ipcMain);
-//import { app, BrowserWindow, Menu, shell, ipcMain} from 'electron';
-//import {getEthereumStart, addAttribute, getIds, runGeth} from './eth';
+const skypet=require('./skypetapi').SkyPetApi;//(ipcMain);
+const SkyPetApi=new skypet(ipcMain);
 
 let menu;
 let template;
 let mainWindow = null;
-
-
-/*ipcMain.on('mainPage', (event, arg)=>{
-  const onContract=(contract)=>{
-    const Ids=getIds();
-    event.sender.send('petId', Ids.hashId);
-    getAttributes(contract, Ids.hashId, Ids.unHashedId, event);
-    ipcMain.on('addAttribute', (attrEvent, attrArg) => {
-      addAttribute(contract, JSON.stringify(attrArg),Ids.hashId, Ids.unHashedId, attrEvent);
-    });
-  }
-  if(checkAccount()){
-    runWeb3(event, onContract);//(arg, event, onContract);
-  }
-  else{
-    
-  }
-})*/
-
-
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support'); // eslint-disable-line

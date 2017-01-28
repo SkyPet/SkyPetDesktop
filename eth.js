@@ -20,20 +20,18 @@ const ethPath=getGethPath("", false);
 const datadir=getGethPath('geth/lightchaindata', testing);
 //const gethCommand=process.platform === 'darwin'?`${__dirname}/geth-mac`:process.platform==='win32'?`${__dirname}/geth-windows`:`${__dirname}/geth`;
 const gethCommand=process.platform === 'darwin'?`geth-mac`:process.platform==='win32'?`geth-windows`:`./geth`;
-//make these automatically generated
+//make these automatically generated!!
 const contractAddress='0x72c1bba9cabab4040c285159c8ea98fd36372858'; 
 const abi=[{"constant":false,"inputs":[],"name":"kill","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"getRevenue","outputs":[],"payable":true,"type":"function"},{"constant":true,"inputs":[{"name":"_petid","type":"bytes32"},{"name":"index","type":"uint256"}],"name":"getAttribute","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"costToAdd","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_petid","type":"bytes32"}],"name":"getNumberOfAttributes","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_petid","type":"bytes32"},{"name":"_attribute","type":"string"}],"name":"addAttribute","outputs":[],"payable":true,"type":"function"},{"inputs":[],"type":"constructor"},{"payable":false,"type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_petid","type":"bytes32"},{"indexed":false,"name":"_attribute","type":"string"}],"name":"attributeAdded","type":"event"}];
 
 
-const getAttributes=(contract, hashId, /*unHashedId,*/ cb)=>{
+const getAttributes=(contract, hashId, cb)=>{
     contract.getNumberOfAttributes(hashId, (err, result)=>{
         var maxIndex=result.c[0];
         var searchResults=Array(maxIndex).fill(0).map((val, index)=>{
             return new Promise((resolve, reject)=>{
                 contract.getAttribute(hashId, index, (err, result)=>{
-                    //const parsedResult=CryptoJS.AES.decrypt(result[1], unHashedId).toString(CryptoJS.enc.Utf8);
                     resolve({value:result[1], timestamp:new Date(result[0].c[0]*1000)});
-                    //resolve(Object.assign(parseResults(parsedResult), {timestamp:new Date(result[0].c[0]*1000)}));
                 });
             }).then((value)=>{
                 return value;
@@ -42,11 +40,9 @@ const getAttributes=(contract, hashId, /*unHashedId,*/ cb)=>{
         Promise.all(searchResults)
         .then(results => {
             cb(null, results);
-            //event.sender.send('retrievedData',results);
         })
         .catch(e => {
             cb(e, null);
-            //console.error(e);
         });
     });
 }
@@ -55,18 +51,15 @@ const getCost=(contract, cb)=>{
         return err?cb(err, null):cb(null, web3.fromWei(result).toString());
     });
 }
-const addAttribute=(password, message, hashId, /*unHashedId,*/ contract, cb)=>{
+const addAttribute=(password, message, hashId, contract, cb)=>{
     const msToKeepAccountUnlocked=3000;
-    getCost(contract, (err1, cost)=>{
+    contract.costToAdd((err1, cost)=>{
         web3.eth.getBalance(web3.eth.defaultAccount, (err2, balance)=>{
             if(cost.greaterThan(balance)){
                 return cb("Not enough Ether!", null);
             }
             web3.personal.unlockAccount(web3.eth.defaultAccount, password, msToKeepAccountUnlocked, (err3, arg)=>{
-                if(err3){
-                    return cb(err3, null);
-                }
-                contract.addAttribute.sendTransaction(hashId, /*CryptoJS.AES.encrypt(message, unHashedId).toString()*/message,
+                return err3?cb("Incorrect Password", null):contract.addAttribute.sendTransaction(hashId, message,
                 {value:cost, gas:3000000}, (err, results)=>{
                     return err?cb(err, null):cb(null, results);
                 });
@@ -97,9 +90,6 @@ const createAccount=(password, cb)=>{
         return err?cb(err, null):cb(null, arg);
     })
 }
-/*const checkAccount=()=>{
-    return config.get('hasAccount');
-}*/
 const getAccounts=(cb)=>{
   web3.eth.getAccounts((err, result)=>{
     if(err||result.length===0){
@@ -141,7 +131,7 @@ const getEthereumStart=(cb, provider="http://localhost:8545")=>{
         web3.setProvider(new web3.providers.HttpProvider(provider));
         cb(geth);
     }   
-    geth.stderr.on('data', wrappedCallback);//(data) => {
+    geth.stderr.on('data', wrappedCallback);
 }
 
 const closeGeth=(geth)=>{
@@ -150,7 +140,6 @@ const closeGeth=(geth)=>{
 exports.addAttribute=addAttribute;
 exports.getAttributes=getAttributes;
 exports.getEthereumStart=getEthereumStart;
-//exports.getIds=getIds;
 exports.getSync=getSync;
 exports.createAccount=createAccount;
 exports.closeGeth=closeGeth;
