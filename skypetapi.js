@@ -2,7 +2,7 @@ const eth=require('./eth');
 const getEthereumStart=eth.getEthereumStart;
 const addAttribute=eth.addAttribute;
 const getAttributes=eth.getAttributes;
-const getIds=eth.getIds;//this is temporary!!
+//const getIds=eth.getIds;//this is temporary!!
 const closeGeth=eth.closeGeth;
 const checkAccount=eth.checkAccount;
 const createAccount=eth.createAccount;
@@ -20,12 +20,12 @@ const returnSuccessError=(event, err, result)=>{
 const SkyPetApi=(event)=>{
     let geth;
     let contract;
-    let hashId;
-    let unHashedId;
+    //let hashId;
+    //let unHashedId;
     const syncHelper=(event)=>{
-        const Ids=getIds();//testing only!
-        hashId=Ids.hashId;//testing only!
-        unHashedId=Ids.unHashedId;//testing only!
+        //const Ids=getIds();//testing only!
+        //hashId=Ids.hashId;//testing only!
+        //unHashedId=Ids.unHashedId;//testing only!
         contract=getContract(); 
         getAccounts((err, account)=>{
             if(!err){
@@ -39,10 +39,11 @@ const SkyPetApi=(event)=>{
         getCost(contract, (err, result)=>{
             err?"":event.sender.send("cost", result);
         })
-        /**THIS IS TEST ONLY!!! */
-        getAttributes(contract, hashId, unHashedId, (err, result)=>{
+        /*BELOW THIS IS TEST ONLY!!! */
+        /*hashId?event.sender.send("petId", hashId):"";//temporary*/
+        /*getAttributes(contract, unHashedId, (err, result)=>{
             err?"":event.sender.send("retrievedData", result);
-        })
+        })*/
     }
     //this doesn't work still
     const close=()=>{
@@ -72,28 +73,23 @@ const SkyPetApi=(event)=>{
         });
     })
     event.on('addAttribute', (event, arg) => {
-        const Ids=getIds();//testing only!
-        hashId=Ids.hashId;
-        unHashedId=Ids.unHashedId;
-        contract&&hashId&&unHashedId?addAttribute(JSON.stringify(arg),hashId, unHashedId, contract, (err, result)=>{
+        contract?addAttribute(arg.password,arg.message, arg.hashId, contract, (err, result)=>{
             err?"":event.sender.send("attributeAdded", true);
         }):"";
     });
-    event.on('id', (event, arg)=>{
-        const Ids=getIds();//testing only!
-        hashId=Ids.hashId;
-        unHashedId=Ids.unHashedId;
-        contract?getAttributes(contract, hashId, unHashedId, (err, resattributesult)=>{
+    event.on('id', (event, hashId)=>{
+        //event.sender.send("petId", hashId);
+        contract?getAttributes(contract, hashId,  (err, attributes)=>{
             err?"":event.sender.send("retrievedData", attributes);
         }):"";
-        contract?watchContract(contract, hashId, unHashedId, (err, attributes)=>{
+        contract?watchContract(contract, hashId,  (err, attributes)=>{
             err?"":event.sender.send("retrievedData", attributes);
         }, (err, balance)=>{
             err?"":event.sender.send("moneyInAccount", balance);
         }):"";
     });
-    event.on('getAttributes', (event, arg) => {
-        contract&&hashId&&unHashedId?getAttributes(contract, hashId, unHashedId, (err, result)=>{
+    event.on('getAttributes', (event, hashId) => {
+        contract?getAttributes(contract, hashId, (err, result)=>{
             err?"":event.sender.send("retrievedData", result);
         }):"";
     });
