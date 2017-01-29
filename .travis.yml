@@ -1,14 +1,13 @@
 sudo: required
 language: node_js
 node_js:
-- 4
 - 6
 cache:
   directories:
   - node_modules
 services:
 - docker
-before-install: "./setup.sh"
+before_install: "./setup.sh"
 install: "./install.sh"
 deploy:
   provider: releases
