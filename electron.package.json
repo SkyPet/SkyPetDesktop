@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "main.js",
   "description":"Desktop Application for SkyPet",
-  "author":"Daniel Stahl",
+  "author":"Daniel Stahl <danstahl1138@gmail.com>",
   "scripts": {
     "start-electron": "cross-env NODE_ENV='development' electron .",
     "start-react":"cross-env REACT_APP_ELECTRON='true' react-scripts start",
@@ -39,12 +39,16 @@
     "electron-builder": "^11.5.1"
   },
   "build": {
+    "asarUnpack":"geth,geth-mac,geth-windows.exe",
     "appId": "skypet.id",
     "mac": {
       "category": "skypet.category.type"
     },
     "win": {
       "iconUrl": "http://image.flaticon.com/icons/png/512/12/12638.png"
+    },
+    "linux":{
+      "target":"deb"
     }
   },
   

@@ -1,5 +1,3 @@
-const tryRequire = require('try-require');
-//const electron = tryRequire('electron');
 const electron=require('electron');
 
 const app=electron.app;
