@@ -16,19 +16,16 @@
     "copy-icon":"mkdir build && mv build-react/background.png build && mv build-react/icon.icns build && mv build-react/icon.ico build",
     "copy-icon-windows":"mkdir build && (robocopy /move build-react build background.png || echo something happened) && (robocopy build-react build icon.icns || echo something happened) && (robocopy build-react build icon.ico || echo something happened)",
     "rm-public":"rm -r -f public",
-    "copy-src-windows":"robocopy  ../../htmlApps/SkyPetGUI/src src /e || echo something happened",
-    "copy-public-windows":"robocopy  ../../htmlApps/SkyPetGUI/public public /e || echo something happened",
-    "copy-src": "cp -r ../../htmlApps/SkyPetGUI/src src",
-    "copy-public": "cp -r ../../htmlApps/SkyPetGUI/public public",
+    "copy-src-windows":"robocopy  ./SkyPetGUI/src src /e || echo something happened",
+    "copy-public-windows":"robocopy  ./SkyPetGUI/public public /e || echo something happened",
+    "copy-src": "cp -r ./SkyPetGUI/src src",
+    "copy-public": "cp -r ./SkyPetGUI/public public",
     "copy-package": "node copyPackage.js",
     "pack": "cross-env NODE_ENV='production' build --dir",
     "dist": "cross-env NODE_ENV='production' build"
   },
   "dependencies": {
-    "crypto-js": "^3.1.9-1",
-    "electron-config": "^0.2.1",
-    "node-uuid": "^1.4.7",
-    "web3": "^0.18.2"
+    "electron-config": "^0.2.1"
   },
   "devDependencies": {
     "electron": "^1.4.15",
@@ -41,6 +38,22 @@
   "build": {
     "asarUnpack":"geth,geth-mac,geth-windows.exe",
     "appId": "skypet.id",
+    "files":[
+      "**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}",
+      "!**/node_modules/.bin",
+      "!**/*.{o,hprof,orig,pyc,pyo,rbc}",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes,.editorconfig,.flowconfig,.yarn-metadata.json,.idea,appveyor.yml,.travis.yml,circle.yml,npm-debug.log,.nyc_output,yarn.lock,.yarn-integrity}",
+      "!public",
+      "!src",
+      "!package.json",
+      "!postProcess.js",
+      "!copyPackage.js",
+      "!SkyPetGUI",
+      "!SkyPetSmartContractWrapper",
+      "SkyPetSmartContractWrapper/eth.js"
+    ],
     "mac": {
       "category": "skypet.category.type"
     },

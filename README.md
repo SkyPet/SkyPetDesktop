@@ -1,9 +1,9 @@
 ##Skypet Electron
 This package uses the Skypet GUI repository for the html.  There are a number of scripts to run to get everything in order.  First, run 
 
-`node copyPackage.js`. 
+`./setup.sh`. 
 
-This will create a "package.json" with the necessary dependencies and scripts.  We need to now install the dependencies:
+This will create a "package.json" with the necessary dependencies and scripts and clone the SkyPet dependencies.  We need to now install the dependencies:
 
 `npm install`
 

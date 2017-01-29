@@ -1,5 +1,7 @@
 npm-debug.log
 .vscode
+SkyPetGUI
+SkyPetSmartContractWrapper
 node_modules
 dist
 package.json

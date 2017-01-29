@@ -1,4 +1,4 @@
-const eth=require('./eth');
+const eth=require('./SkyPetSmartContractWrapper/eth');
 const getEthereumStart=eth.getEthereumStart;
 const addAttribute=eth.addAttribute;
 const getAttributes=eth.getAttributes;
