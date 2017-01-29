@@ -21,9 +21,15 @@ Any additional server edits requires a rebuild, which means just rerunning
 
 `npm run build-electron-react`
 
-##Production/Binary
+## Production/Binary
 
-To create a distributable binary, on Ubuntu first do:
+### Docker
+To create a distributable binary for Ubuntu and Windows (deb and exe):
+
+`./install.sh`
+
+### Without docker
+On Ubuntu first do:
 
 `sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils`
 
