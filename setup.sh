@@ -11,7 +11,6 @@ function cloneAndCheckout {
 	fi
 }
 cloneAndCheckout "SkyPetGUI"
-cloneAndCheckout "SkyPetSmartContractWrapper"
 node copyPackage
 
 

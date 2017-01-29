@@ -25,7 +25,8 @@
     "dist": "cross-env NODE_ENV='production' build"
   },
   "dependencies": {
-    "electron-config": "^0.2.1"
+    "electron-config": "^0.2.1",
+    "skypetwrapper":"^1.0.2"
   },
   "devDependencies": {
     "electron": "^1.4.15",
