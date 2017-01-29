@@ -34,7 +34,6 @@ function SkyPetApi(event){
             err?"":event.sender.send("cost", result);
         })
     }
-    //this doesn't work still
     this.close=()=>{
         if(geth){
             closeGeth(geth);
