@@ -7,7 +7,9 @@ cache:
   - node_modules
 services:
 - docker
-before_install: "./setup.sh"
+before_install: 
+- npm install -g electron
+- "./setup.sh"
 install: "./install.sh"
 deploy:
   provider: releases
