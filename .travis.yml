@@ -9,6 +9,9 @@ services:
 - docker
 before_install: 
 - npm install -g electron
+- node copyPackage
+- npm install
+- npm run build-electron-react
 - "./setup.sh"
 install: "./install.sh"
 deploy:
