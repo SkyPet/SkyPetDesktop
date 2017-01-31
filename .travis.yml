@@ -12,6 +12,7 @@ before_install:
 - "./setup.sh"
 - npm install
 - "./buildhtml.sh"
+- ls
 install: "./install.sh"
 deploy:
   provider: releases
