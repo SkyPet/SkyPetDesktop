@@ -22,3 +22,4 @@ deploy:
   - "./dist/skypetdesktop Setup 0.0.1.exe"
   on:
     repo: SkyPet/SkyPetDesktop
+    tags: true
