@@ -12,6 +12,7 @@ before_install:
 - "./setup.sh"
 - node copyPackage
 - npm install
+- npm ls
 - npm run build-electron-react
 install: "./install.sh"
 deploy:
