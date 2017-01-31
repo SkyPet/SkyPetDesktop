@@ -18,7 +18,7 @@ deploy:
   api_key:
     secure: SAEIy7xvJFVk+TCAb46c1KfLtPOkUblYXM43kcl8cWoqxSDT4XlWc7DTx5ZX9M3GD2+iQu7W5Ed4jMetRA6VSyR0UnTBe+/bQ0HpvR6zMPstb2gWZ7AFR30WYIbGDe/GqarmxDbJJj4umYaMiOMOzuvj4XzthFZud5TzEOcHRy8++KCJc9WrV1eUvXm9vokrKyOG9qcmwdM3dxHzKDII9QFPKrVDpw5OqBIivsuGM6q1PrNTFn5RqGfjwRbST3zlowVS+CF24d7fi/a4RJpsc74NhnMbz9LJSH3LXfU1nxoGoXVqrT4z46UvVd0Ha9Pm9/tO+MI+FJ2BqLG7I4KtNMIiTiLZdz19Me7aWyKta23IC5akWNt64AX4912yVeJgSNjVMisTxmm9wEt6VF0rsPqb8vHleup4yXt3J5D1A8NL/NMo8OXmiAhAwIC+s+jaaNgmvSVAiJOFcYrQFGWHH1o0J4TsfiguCGnR39hoOZAW4syLlzPm7XP5sp7++E4DEkBA2YpiM4AldAAb0FBdYpeWQCqLBIfEtzlFdUOxJKyH+rgkABn7uw8P7r+oOlmMlLpAh9aR4rp8ZPJzH3Ly0qEtbLQU3BTazBqL1IJhFKw67neCbvmPfQxnQdsvABaujDcea2EASTaLiemKE0ApLbM0u8DjmTQ9ZBbcntkAiVw=
   file: 
-  - "./dist/skypetdesktop-0.0.1_amd64.deb"
+  - "./dist/skypetdesktop_0.0.1_amd64.deb"
   - "./dist/skypetdesktop Setup 0.0.1.exe"
   on:
     repo: SkyPet/SkyPetDesktop
