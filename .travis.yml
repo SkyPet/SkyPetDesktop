@@ -10,10 +10,8 @@ services:
 before_install: 
 - npm install -g electron
 - "./setup.sh"
-- node copyPackage
 - npm install
-- npm ls
-- npm run build-electron-react
+- "./buildhtml.sh"
 install: "./install.sh"
 deploy:
   provider: releases
