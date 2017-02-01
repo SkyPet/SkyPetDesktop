@@ -12,7 +12,7 @@ before_install:
 - "./setup.sh"
 - npm install
 - "./buildhtml.sh"
-- cd build
+- cd build-react
 - ls
 - cd ..
 install: "./install.sh"
