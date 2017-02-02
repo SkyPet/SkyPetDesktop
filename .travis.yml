@@ -14,7 +14,9 @@ before_install:
 - "./buildhtml.sh"
 - cd build-react
 - cd static
+- cd js
 - ls
+- cd ..
 - cd ..
 - cd ..
 install: "./install.sh"
