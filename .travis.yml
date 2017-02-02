@@ -13,7 +13,9 @@ before_install:
 - npm install
 - "./buildhtml.sh"
 - cd build-react
+- cd static
 - ls
+- cd ..
 - cd ..
 install: "./install.sh"
 deploy:
