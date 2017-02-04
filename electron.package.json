@@ -1,76 +1,80 @@
 {
-  "name": "skypetdesktop",
-  "version": "0.0.1",
-  "main": "main.js",
-  "description":"Desktop Application for SkyPet",
-  "author":"Daniel Stahl <danstahl1138@gmail.com>",
-  "scripts": {
-    "start-electron": "cross-env NODE_ENV='development' electron .",
-    "start-react":"cross-env REACT_APP_ELECTRON='true' react-scripts start",
-    "build-electron-react":"rm -r -f build-react && rm -r -f build && npm run rm-public && npm run rm-src && npm run copy-src && npm run copy-public && cross-env REACT_APP_ELECTRON='true' npm run build && npm run post-process-react && npm run rename-client-build && npm run copy-icon",
-    "build-electron-react-windows":"(rd /s /q build-react || echo no build-react) && (rd /s /q build || echo no build-react) && npm run copy-package && (rd /s /q public || echo no build-react) && (rd /s /q src || echo no build-react) && npm run copy-src-windows && npm run copy-public-windows && cross-env REACT_APP_ELECTRON='true' npm run build && npm run post-process-react && npm run rename-client-build-windows && npm run copy-icon-windows",
-    "deploy":"./deploy.sh",
-    "post-process-react":"node postProcess.js",
-    "rm-src":"rm -r -f src",
-    "rename-client-build":"mv build build-react",
-    "rename-client-build-windows":"move build build-react || echo something happened",
-    "copy-icon":"mkdir build && mv build-react/background.png build && mv build-react/icon.icns build && mv build-react/icon.ico build",
-    "copy-icon-windows":"mkdir build && (robocopy /move build-react build background.png || echo something happened) && (robocopy build-react build icon.icns || echo something happened) && (robocopy build-react build icon.ico || echo something happened)",
-    "rm-public":"rm -r -f public",
-    "copy-src-windows":"robocopy  ./SkyPetGUI/src src /e || echo something happened",
-    "copy-public-windows":"robocopy  ./SkyPetGUI/public public /e || echo something happened",
-    "copy-src": "cp -r ./SkyPetGUI/src src",
-    "copy-public": "cp -r ./SkyPetGUI/public public",
-    "copy-package": "node copyPackage.js",
-    "pack": "cross-env NODE_ENV='production' build --dir",
-    "dist": "cross-env NODE_ENV='production' build -wl"
-  },
-  "dependencies": {
-    "electron-config": "^0.2.1",
-    "skypetwrapper":"^1.1.4"
-  },
-  "devDependencies": {
-    "electron": "^1.4.15",
-    "cross-env": "^3.1.4",
-    "electron-devtools-installer": "^2.0.1",
-    "electron-debug": "^1.1.0",
-    "react-scripts": "0.8.5",
-    "electron-builder": "^11.5.1"
-  },
-  "build": {
-    "appId": "skypet.id",
-    "extraFiles":["ethBinaries"],
-    "files":[
-      "**/*",
-      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}",
-      "!**/node_modules/.bin",
-      "!**/*.{o,hprof,orig,pyc,pyo,rbc}",
-      "!**/._*",
-      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes,.editorconfig,.flowconfig,.yarn-metadata.json,.idea,appveyor.yml,.travis.yml,circle.yml,npm-debug.log,.nyc_output,yarn.lock,.yarn-integrity}",
-      "!public",
-      "!src",
-      "!package.json",
-      "!postProcess.js",
-      "!copyPackage.js",
-      "!SkyPetGUI",
-      "!.vscode",
-      "!*.sh",
-      "!syncVersion.js",
-      "!README.md"
-    ],
-    "mac": {
-      "category": "skypet.category.type"
-    },
-    "win": {
-      "iconUrl": "http://image.flaticon.com/icons/png/512/12/12638.png"
-    },
-    "linux":{
-      "target":["AppImage","deb"]
-    }
-  },
-  
-  "homepage": "./",
-  "bin": {
-    "electron": "./node_modules/.bin/electron"
-  }
+	"name": "skypetdesktop",
+	"version": "0.0.1",
+	"main": "main.js",
+	"description": "Desktop Application for SkyPet",
+	"author": "Daniel Stahl <danstahl1138@gmail.com>",
+	"scripts": {
+		"start-electron": "cross-env NODE_ENV='development' electron .",
+		"start-react": "cross-env REACT_APP_ELECTRON='true' react-scripts start",
+		"build-electron-react": "rm -r -f build-react && rm -r -f build && npm run rm-public && npm run rm-src && npm run copy-src && npm run copy-public && cross-env REACT_APP_ELECTRON='true' npm run build && npm run post-process-react && npm run rename-client-build && npm run copy-icon",
+		"build-electron-react-windows": "(rd /s /q build-react || echo no build-react) && (rd /s /q build || echo no build-react) && npm run copy-package && (rd /s /q public || echo no build-react) && (rd /s /q src || echo no build-react) && npm run copy-src-windows && npm run copy-public-windows && cross-env REACT_APP_ELECTRON='true' npm run build && npm run post-process-react && npm run rename-client-build-windows && npm run copy-icon-windows",
+		"deploy": "./deploy.sh",
+		"post-process-react": "node postProcess.js",
+		"rm-src": "rm -r -f src",
+		"rename-client-build": "mv build build-react",
+		"rename-client-build-windows": "move build build-react || echo something happened",
+		"copy-icon": "mkdir build && mv build-react/background.png build && mv build-react/icon.icns build && mv build-react/icon.ico build",
+		"copy-icon-windows": "mkdir build && (robocopy /move build-react build background.png || echo something happened) && (robocopy build-react build icon.icns || echo something happened) && (robocopy build-react build icon.ico || echo something happened)",
+		"rm-public": "rm -r -f public",
+		"copy-src-windows": "robocopy  ./SkyPetGUI/src src /e || echo something happened",
+		"copy-public-windows": "robocopy  ./SkyPetGUI/public public /e || echo something happened",
+		"copy-src": "cp -r ./SkyPetGUI/src src",
+		"copy-public": "cp -r ./SkyPetGUI/public public",
+		"copy-package": "node copyPackage.js",
+		"pack": "cross-env NODE_ENV='production' build --dir",
+		"dist": "cross-env NODE_ENV='production' build -wl"
+	},
+	"dependencies": {
+		"electron-config": "^0.2.1",
+		"skypetwrapper": "^1.1.4"
+	},
+	"devDependencies": {
+		"electron": "^1.4.15",
+		"cross-env": "^3.1.4",
+		"electron-devtools-installer": "^2.0.1",
+		"electron-debug": "^1.1.0",
+		"react-scripts": "0.8.5",
+		"electron-builder": "^11.5.1"
+	},
+	"build": {
+		"appId": "skypet.id",
+		"extraFiles": [
+			"ethBinaries"
+		],
+		"files": [
+			"**/*",
+			"!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}",
+			"!**/node_modules/.bin",
+			"!**/*.{o,hprof,orig,pyc,pyo,rbc}",
+			"!**/._*",
+			"!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes,.editorconfig,.flowconfig,.yarn-metadata.json,.idea,appveyor.yml,.travis.yml,circle.yml,npm-debug.log,.nyc_output,yarn.lock,.yarn-integrity}",
+			"!public",
+			"!src",
+			"!package.json",
+			"!postProcess.js",
+			"!copyPackage.js",
+			"!SkyPetGUI",
+			"!.vscode",
+			"!*.sh",
+			"!syncVersion.js",
+			"!README.md"
+		],
+		"mac": {
+			"category": "skypet.category.type"
+		},
+		"win": {
+			"iconUrl": "http://image.flaticon.com/icons/png/512/12/12638.png"
+		},
+		"linux": {
+			"target": [
+				"AppImage",
+				"deb"
+			]
+		}
+	},
+	"homepage": "./",
+	"bin": {
+		"electron": "./node_modules/.bin/electron"
+	}
 }
