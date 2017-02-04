@@ -12,5 +12,5 @@ updatedVersion=$(node syncVersion.js);
 #echo "$updatedVersion"
 git add .
 git commit -m "release $updatedVersion"
-git tag -a ${updatedVersion} -m "updating to $updatedVersion"
+printf git tag -a $updatedVersion -m "updating to $updatedVersion"
 #git push --follow-tags origin master
