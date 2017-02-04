@@ -114,10 +114,11 @@ const GetGeth=(userpath, eventSender, cb)=>{
             return;
         }
         getHttp(gethJson, (err, data)=>{
-            eventSender.send("info", "Binary Downloading...");
+            const firstTimeMessage="Setting up for first use: ";
+            eventSender.send("info", `${firstTimeMessage} Binary Downloading...`);
             const metaResults=data.clients.Geth.platforms[myPlatform].x64.download;
             getGethPackage(metaResults, fullFolder, (err, archive)=>{
-                eventSender.send("info", "Binary Extracting...");
+                eventSender.send("info", `${firstTimeMessage} Binary Extracting...`);
                 return err?cb(err, fullFolder):extractGethPackage(metaResults, fullFolder, archive, (err, results)=>{
                     eventSender.send("info", "Launching Geth...");
                     return err?cb(err, fullFolder):getBinaryFromExtract(metaResults, fullFolder, cb);
