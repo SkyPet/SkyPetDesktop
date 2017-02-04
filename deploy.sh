@@ -8,9 +8,9 @@ node copyPackage.js
 git add .
 git commit -m "deployCommit"
 npm version $1
-updatedVersion=$(node syncVersion.js);
-echo "$updatedVersion"
+updatedVersion=$(node syncVersion.js)
 git add .
-git commit -m "release "$updatedVersion""
-git tag -a "$updatedVersion" -m "updating to "$updatedVersion""
+git commit -m "release v$updatedVersion"
+#git push origin master
+git tag -a "v$updatedVersion" -m "updating to v$updatedVersion"
 #git push --follow-tags origin master

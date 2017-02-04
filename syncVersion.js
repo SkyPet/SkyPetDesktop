@@ -5,4 +5,4 @@ var package=JSON.parse(fs.readFileSync("./package.json"))
 currPackage.version=package.version;
 
 fs.writeFileSync(electronPackagePath, JSON.stringify(currPackage, null, '\t'));
-return package.version;
+console.log(package.version);
