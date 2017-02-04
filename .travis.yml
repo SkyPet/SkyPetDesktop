@@ -21,6 +21,7 @@ deploy:
   file: 
   - "./dist/skypetdesktop_*.deb"
   - "./dist/skypetdesktop Setup*.exe"
+  - "./dist/skypetdesktop_*.zip"
   on:
     repo: SkyPet/SkyPetDesktop
     tags: true

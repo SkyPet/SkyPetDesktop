@@ -16,22 +16,30 @@ const getSync=eth.getSync;
 const returnSuccessError=(event, err, result)=>{
     return err?event.sender.send("passwordError", err):event.sender.send("successLogin", result);
 }
-function SkyPetApi(event){
+function SkyPetApi(event, globalevent, gethBinary){
     let geth;
     let contract;
+    getEthereumStart(gethBinary, (gethInstance)=>{
+        geth=gethInstance;
+        getSync((progress)=>{
+            globalevent.send("sync", {currentProgress:progress, isSyncing:true});
+        }, ()=>{
+            syncHelper(globalevent);
+        })
+    });
     const syncHelper=(event)=>{
         contract=getContract(); 
         getAccounts((err, account)=>{
             if(!err){
                 getMoneyInAccount(account, (err, balance)=>{
-                    event.sender.send("moneyInAccount", balance);
+                    event.send("moneyInAccount", balance);
                 })
-                event.sender.send("account", account);
-                event.sender.send("sync", {currentProgress:100, isSyncing:false});
+                event.send("account", account);
+                event.send("sync", {currentProgress:100, isSyncing:false});
             }
         })
         getCost(contract, (err, result)=>{
-            err?"":event.sender.send("cost", result);
+            err?"":event.send("cost", result);
         })
     }
     this.close=()=>{
@@ -39,17 +47,11 @@ function SkyPetApi(event){
             closeGeth(geth);
         }
     }
+    
     //Dont expose this to the public.  Private only!
-    event.on('startEthereum', (event, arg)=>{
-        getEthereumStart((gethInstance)=>{
-            geth=gethInstance;
-            getSync((progress)=>{
-                event.sender.send("sync", {currentProgress:progress, isSyncing:true});
-            }, ()=>{
-                syncHelper(event);
-            })
-        });
-    })
+    //event.on('startEthereum', (event, arg)=>{
+        
+    //})
     event.on('password', (event, arg)=>{
         getAccounts((err, result)=>{
             return err?createAccount(arg, (err, result)=>{

@@ -5,12 +5,12 @@ const BrowserWindow=electron.BrowserWindow;
 const Menu=electron.Menu;
 const shell=electron.shell;
 const ipcMain=electron.ipcMain;
+let SkyPetApi;
 
-process.env.binaryPath="ethBinaries";
+//process.env.binaryPath="ethBinaries";
 //process.env.gethProduction=true;
 //process.env.gethPath='/';
-const skypet=require('./skypetapi').SkyPetApi;//(ipcMain);
-const SkyPetApi=new skypet(ipcMain);
+
 
 let menu;
 let template;
@@ -39,6 +39,14 @@ app.on('ready', () => {
     width: 1024,
     height: 728
   });
+  const GetGeth=require('./downloadGeth').GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
+    if(!locationOfBinary){
+      console.log(err);
+      app.quit();
+    }
+    const skypet=require('./skypetapi').SkyPetApi;//(ipcMain);
+    SkyPetApi=new skypet(ipcMain, mainWindow.webContents, locationOfBinary);
+  });
 
   mainWindow.loadURL(`file://${__dirname}/build-react/electronIndex.html`);
 
@@ -49,7 +57,7 @@ app.on('ready', () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
-    SkyPetApi.close();
+    SkyPetApi?SkyPetApi.close():"";
 
   });
 

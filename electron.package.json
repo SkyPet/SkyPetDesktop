@@ -27,7 +27,10 @@
 	},
 	"dependencies": {
 		"electron-config": "^0.2.1",
-		"skypetwrapper": "^1.1.4"
+		"skypetwrapper": "^1.2.0",
+		"fs-extra": "^2.0.0",
+		"node-zip": "^1.1.1",
+		"tar.gz": "^1.0.5"
 	},
 	"devDependencies": {
 		"electron": "^1.4.15",
@@ -39,9 +42,6 @@
 	},
 	"build": {
 		"appId": "skypet.id",
-		"extraFiles": [
-			"ethBinaries"
-		],
 		"files": [
 			"**/*",
 			"!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}",
@@ -68,7 +68,7 @@
 		},
 		"linux": {
 			"target": [
-				"AppImage",
+				"zip",
 				"deb"
 			]
 		}
