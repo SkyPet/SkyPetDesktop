@@ -9,6 +9,7 @@
     "start-react":"cross-env REACT_APP_ELECTRON='true' react-scripts start",
     "build-electron-react":"rm -r -f build-react && rm -r -f build && npm run rm-public && npm run rm-src && npm run copy-src && npm run copy-public && cross-env REACT_APP_ELECTRON='true' npm run build && npm run post-process-react && npm run rename-client-build && npm run copy-icon",
     "build-electron-react-windows":"(rd /s /q build-react || echo no build-react) && (rd /s /q build || echo no build-react) && npm run copy-package && (rd /s /q public || echo no build-react) && (rd /s /q src || echo no build-react) && npm run copy-src-windows && npm run copy-public-windows && cross-env REACT_APP_ELECTRON='true' npm run build && npm run post-process-react && npm run rename-client-build-windows && npm run copy-icon-windows",
+    "deploy":"./deploy.sh",
     "post-process-react":"node postProcess.js",
     "rm-src":"rm -r -f src",
     "rename-client-build":"mv build build-react",
@@ -26,7 +27,7 @@
   },
   "dependencies": {
     "electron-config": "^0.2.1",
-    "skypetwrapper":"^1.0.2"
+    "skypetwrapper":"^1.1.4"
   },
   "devDependencies": {
     "electron": "^1.4.15",
@@ -37,8 +38,8 @@
     "electron-builder": "^11.5.1"
   },
   "build": {
-    "asarUnpack":"geth,geth-mac,geth-windows.exe",
     "appId": "skypet.id",
+    "extraFiles":["ethBinaries"],
     "files":[
       "**/*",
       "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}",
@@ -51,7 +52,11 @@
       "!package.json",
       "!postProcess.js",
       "!copyPackage.js",
-      "!SkyPetGUI"
+      "!SkyPetGUI",
+      "!.vscode",
+      "!*.sh",
+      "!syncVersion.js",
+      "!README.md"
     ],
     "mac": {
       "category": "skypet.category.type"

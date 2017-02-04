@@ -5,6 +5,10 @@ const BrowserWindow=electron.BrowserWindow;
 const Menu=electron.Menu;
 const shell=electron.shell;
 const ipcMain=electron.ipcMain;
+
+process.env.binaryPath="ethBinaries";
+//process.env.gethProduction=true;
+//process.env.gethPath='/';
 const skypet=require('./skypetapi').SkyPetApi;//(ipcMain);
 const SkyPetApi=new skypet(ipcMain);
 
