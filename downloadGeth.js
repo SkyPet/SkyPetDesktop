@@ -108,7 +108,7 @@ const GetGeth=(userpath, eventSender, cb)=>{
     doesBinaryAlreadyExist(userpath, (err, fullFolder)=>{
         if(err&&!process.env.FORCE_GETH_UPDATE){
             fs.readdir(fullFolder, (err, files)=>{
-                eventSender.send("info", "Geth Exists");
+                eventSender.send("info", "Launching Geth...");
                 cb(null, path.join(fullFolder,files[0]));
             });
             return;

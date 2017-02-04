@@ -39,20 +39,21 @@ app.on('ready', () => {
     width: 1024,
     height: 728
   });
-  const GetGeth=require('./downloadGeth').GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
-    if(!locationOfBinary){
-      console.log(err);
-      app.quit();
-    }
-    const skypet=require('./skypetapi').SkyPetApi;//(ipcMain);
-    SkyPetApi=new skypet(ipcMain, mainWindow.webContents, locationOfBinary);
-  });
+  
 
   mainWindow.loadURL(`file://${__dirname}/build-react/electronIndex.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();
     mainWindow.focus();
+    const GetGeth=require('./downloadGeth').GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
+      if(!locationOfBinary){
+        console.log(err);
+        app.quit();
+      }
+      const skypet=require('./skypetapi').SkyPetApi;//(ipcMain);
+      SkyPetApi=new skypet(ipcMain, mainWindow.webContents, locationOfBinary);
+    });
   });
 
   mainWindow.on('closed', () => {
