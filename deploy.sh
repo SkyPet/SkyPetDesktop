@@ -9,8 +9,8 @@ git add .
 git commit -m "deployCommit"
 npm version $1
 updatedVersion=$(node syncVersion.js);
-#echo "$updatedVersion"
+echo "$updatedVersion"
 git add .
-git commit -m "release $updatedVersion"
-printf git tag -a $updatedVersion -m "updating to $updatedVersion"
+git commit -m "release "$updatedVersion""
+git tag -a "$updatedVersion" -m "updating to "$updatedVersion""
 #git push --follow-tags origin master
