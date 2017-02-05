@@ -69,7 +69,7 @@ const getGethPackage=(meta, gethFolder, cb)=>{
 }
 const extractGethPackage=(meta, gethFolder, archivePath, cb)=>{
     if(meta.type==='zip'){
-        const extArch=nodeZip.lib.Extract({path:gethFolder}).on('error', (err)=>{
+        const extArch=nodeZip.Extract({path:gethFolder}).on('error', (err)=>{
             cb(err, null);
         }).on('end', ()=>{
             cb(null, "done");
