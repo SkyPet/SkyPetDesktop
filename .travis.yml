@@ -1,10 +1,6 @@
 language: node_js
 sudo: required
 
-branches:
-  only:
-    - master
-    - release
 matrix:
   include:
     # LINUX
@@ -38,7 +34,10 @@ before_install:
 - "./buildhtml.sh"
 script: 
 - if [[ $TRAVIS_OS_NAME == "linux" ]]; then ./install.sh; fi;
-- if [[ $TRAVIS_OS_NAME == "osx" ]]; then npm run distMac; cd dist;ls;cd ..; fi;
+- if [[ $TRAVIS_OS_NAME == "osx" ]]; then npm run distMac; fi;
+- cd dist
+- ls
+- cd ..
 deploy:
   provider: releases
   api_key:
