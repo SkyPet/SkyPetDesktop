@@ -36,7 +36,9 @@ script:
 - if [[ $TRAVIS_OS_NAME == "linux" ]]; then ./install.sh; fi;
 - if [[ $TRAVIS_OS_NAME == "osx" ]]; then npm run distMac; fi;
 - cd dist
-- ls
+- if [[ $TRAVIS_OS_NAME == "osx" ]]; then cd mac; fi;
+- if [[ $TRAVIS_OS_NAME == "osx" ]]; then ls; fi;
+- if [[ $TRAVIS_OS_NAME == "osx" ]]; then cd ..; fi;
 - cd ..
 deploy:
   provider: releases
@@ -45,7 +47,7 @@ deploy:
   file_glob: true
   file: 
   - "./dist/skypetdesktop_*.deb"
-  - "./dist/skypetdesktop*.dmg"
+  - "./dist/mac/skypetdesktop*.dmg"
   - "./dist/skypetdesktop Setup*.exe"
   - "./dist/skypetdesktop_*.zip"
   on:

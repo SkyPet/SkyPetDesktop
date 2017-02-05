@@ -3,11 +3,7 @@ const path=require('path');
 const fs=require('fs-extra');
 const nodeZip=require('node-zip');
 const targz=require('tar.gz');
-/*const myTargz={
-    Extract:(options)=>{
-        return targz().createWriteStream(options.path);
-    }
-}*/
+
 const zipUtils={
     zip:"zip",
     tar:"tar.gz"
