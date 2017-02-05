@@ -3,8 +3,8 @@ sudo: required
 
 branches:
   only:
-    - develop
     - master
+    - release
 
 matrix:
   include:
