@@ -5,7 +5,6 @@ branches:
   only:
     - master
     - release
-
 matrix:
   include:
     # LINUX
@@ -23,9 +22,7 @@ matrix:
 
   allow_failures:
   - os: osx
-
   #fast_finish: true
-
 
 cache:
   directories:
@@ -41,7 +38,7 @@ before_install:
 - "./buildhtml.sh"
 script: 
 - if [[ $TRAVIS_OS_NAME == "linux" ]]; then ./install.sh; fi;
-- if [[ $TRAVIS_OS_NAME == "osx" ]]; then npm run distMac; fi;
+- if [[ $TRAVIS_OS_NAME == "osx" ]]; then npm run distMac; cd dist;ls;cd ..; fi;
 deploy:
   provider: releases
   api_key:
@@ -54,5 +51,4 @@ deploy:
   - "./dist/skypetdesktop_*.zip"
   on:
     repo: SkyPet/SkyPetDesktop
-    branch: release
-    #tags: true
+    tags: true
