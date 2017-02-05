@@ -1,6 +1,6 @@
 {
 	"name": "skypetdesktop",
-	"version": "0.0.18",
+	"version": "0.0.19",
 	"main": "main.js",
 	"description": "Desktop Application for SkyPet",
 	"author": "Daniel Stahl <danstahl1138@gmail.com>",
@@ -34,9 +34,12 @@
 		"unzip": "^0.1.11",
 		"tar.gz": "^1.0.5"
 	},
-	"jest":{
-    	"coveragePathIgnorePatterns":["/node_modules/", "/SkyPetGUI/"]
-  	},
+	"jest": {
+		"coveragePathIgnorePatterns": [
+			"/node_modules/",
+			"/SkyPetGUI/"
+		]
+	},
 	"devDependencies": {
 		"electron": "^1.4.15",
 		"cross-env": "^3.1.4",
