@@ -1,6 +1,6 @@
 {
 	"name": "skypetdesktop",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"main": "main.js",
 	"description": "Desktop Application for SkyPet",
 	"author": "Daniel Stahl <danstahl1138@gmail.com>",
@@ -64,14 +64,14 @@
 		"dmg": {
 			"contents": [
 				{
-				"x": 110,
-				"y": 150
+					"x": 110,
+					"y": 150
 				},
 				{
-				"x": 240,
-				"y": 150,
-				"type": "link",
-				"path": "/Applications"
+					"x": 240,
+					"y": 150,
+					"type": "link",
+					"path": "/Applications"
 				}
 			]
 		},
