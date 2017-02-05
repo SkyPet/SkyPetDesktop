@@ -9,10 +9,10 @@ const zipUtils={
     tar:"tar.gz"
 }
 
-const isPlatform=(platform)=>{
-    return process.platform===platform?true:false;
+const isPlatform=(sysPlatform, platform)=>{
+    return sysPlatform===platform?true:false;
 }
-const getPlatform=()=>{
+const getPlatform=(sysPlatform=process.platform)=>{
     const possiblePlatforms=[
         {
           geth:'win',
@@ -28,21 +28,25 @@ const getPlatform=()=>{
         }
     ]
     const currPlatform=possiblePlatforms.filter((value, index)=>{
-        return isPlatform(value.node);
+        return isPlatform(sysPlatform, value.node);
     });
     return currPlatform.length>0?currPlatform[0].geth:null;
 }
 const doesBinaryAlreadyExist=(userpath, cb)=>{
     const gethPath=path.join(userpath, '/geth');
     fs.mkdir(gethPath, (err, result)=>{cb(err, gethPath)});
-    //return p1;
 }
 const getHttp=(url, cb)=>{
     https.get(url, (res)=>{
         let rawData = '';
         res.on('data', (chunk) => rawData += chunk);
         res.on('end', () => {
-            cb(null, JSON.parse(rawData));//.clients.Geth.platforms[myPlatform].x64.download;
+            try{
+                cb(null, JSON.parse(rawData));
+            }catch(e){
+                cb(e, null);
+            }
+            //.clients.Geth.platforms[myPlatform].x64.download;
         });
     });
 }
@@ -87,8 +91,6 @@ const getBinaryFromExtract=(meta, gethFolder, cb)=>{
     const binaryName=path.basename(meta.bin);
     const folderName=path.dirname(path.join(gethFolder, meta.bin));
     const dstFile=path.join(gethFolder, binaryName);
-    console.log(srcFile);
-    console.log(dstFile);
     fs.copy(srcFile, dstFile, (err, result)=>{
         fs.remove(folderName);
         return err?cb(err, null):cb(null, dstFile);

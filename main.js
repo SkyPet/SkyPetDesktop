@@ -46,12 +46,12 @@ app.on('ready', () => {
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();
     mainWindow.focus();
-    const GetGeth=require('./downloadGeth').GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
+    const GetGeth=require('./modules/downloadGeth').GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
       if(!locationOfBinary){
         console.log(err);
         app.quit();
       }
-      const skypet=require('./skypetapi').SkyPetApi;//(ipcMain);
+      const skypet=require('./modules/skypetapi').SkyPetApi;//(ipcMain);
       SkyPetApi=new skypet(ipcMain, mainWindow.webContents, locationOfBinary);
     });
   });
