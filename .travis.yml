@@ -32,11 +32,8 @@ before_install:
 - "./setup.sh"
 - npm install
 - "./buildhtml.sh"
-install:
-  - npm install -g codecov
 script: 
 - if [[ $TRAVIS_OS_NAME == "linux" ]]; then npm test -- --coverage; fi;
-- if [[ $TRAVIS_OS_NAME == "linux" ]]; then codecov; fi;
 - if [[ $TRAVIS_OS_NAME == "linux" ]]; then ./install.sh; fi;
 - if [[ $TRAVIS_OS_NAME == "osx" ]]; then npm run distMac; fi;
 
