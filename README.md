@@ -15,7 +15,7 @@ Now we run the electron development:
 
 `npm run start-electron`
 
-To do any GUI edits edit SkyPetGUI and NOT THE COPIED GUI that is in "src" and "public".  
+To do any GUI edits edit [SkyPetGUI](https://github.com/SkyPet/SkyPetGUI) and NOT THE COPIED GUI that is in "src" and "public".  
 
 Any additional server edits requires a rebuild, which means just rerunning 
 
