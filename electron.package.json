@@ -34,6 +34,9 @@
 		"unzip": "^0.1.11",
 		"tar.gz": "^1.0.5"
 	},
+	"jest":{
+    	"coveragePathIgnorePatterns":["/node_modules/", "/SkyPetGUI/"]
+  	},
 	"devDependencies": {
 		"electron": "^1.4.15",
 		"cross-env": "^3.1.4",
