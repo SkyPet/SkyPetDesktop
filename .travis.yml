@@ -54,5 +54,5 @@ deploy:
   - "./dist/skypetdesktop_*.zip"
   on:
     repo: SkyPet/SkyPetDesktop
-    branch:release
+    branch: release
     #tags: true
