@@ -1,6 +1,6 @@
 {
 	"name": "skypetdesktop",
-	"version": "0.0.19",
+	"version": "0.0.20",
 	"main": "main.js",
 	"description": "Desktop Application for SkyPet",
 	"author": "Daniel Stahl <danstahl1138@gmail.com>",
@@ -27,12 +27,12 @@
 		"dist": "cross-env NODE_ENV='production' build -wl",
 		"distMac": "cross-env NODE_ENV='production' build -m"
 	},
-	"jest":{
+	"jest": {
 		"collectCoverageFrom": [
 			"modules/**/*.{js,jsx}"
 		],
-		"coverageDirectory":"coverage",
-		"testPathDirs":[
+		"coverageDirectory": "coverage",
+		"testPathDirs": [
 			"modules"
 		]
 	},
@@ -46,7 +46,7 @@
 	"devDependencies": {
 		"electron": "^1.4.15",
 		"cross-env": "^3.1.4",
-		"rewire":"^2.5.2",
+		"rewire": "^2.5.2",
 		"jest": "^18.1.0",
 		"electron-devtools-installer": "^2.0.1",
 		"electron-debug": "^1.1.0",
