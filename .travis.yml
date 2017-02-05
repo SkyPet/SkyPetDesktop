@@ -24,7 +24,7 @@ matrix:
   allow_failures:
   - os: osx
 
-  fast_finish: true
+  #fast_finish: true
 
 
 cache:
@@ -54,4 +54,5 @@ deploy:
   - "./dist/skypetdesktop_*.zip"
   on:
     repo: SkyPet/SkyPetDesktop
-    tags: true
+    branch:release
+    #tags: true
