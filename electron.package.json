@@ -61,8 +61,19 @@
 			"!syncVersion.js",
 			"!README.md"
 		],
-		"mac": {
-			"category": "skypet.category.type"
+		"dmg": {
+			"contents": [
+				{
+				"x": 110,
+				"y": 150
+				},
+				{
+				"x": 240,
+				"y": 150,
+				"type": "link",
+				"path": "/Applications"
+				}
+			]
 		},
 		"win": {
 			"iconUrl": "http://image.flaticon.com/icons/png/512/12/12638.png"

@@ -1,24 +1,36 @@
-sudo: required
 language: node_js
+sudo: required
+
+branches:
+  only:
+    - develop
+    - master
+
 matrix:
   include:
+    # LINUX
+    - os: linux
+      dist: trusty
+      node_js: 6
+      env:
+          - GULP_PLATFORM=linux
+    # MAC
     - os: osx
-        osx_image: xcode8  # currently xcode8.1+ doesn't support electron-builder macOS code-signing (https://github.com/electron-userland/electron-builder/issues/820#issuecomment-267777060)
-        node_js: 6
-        env:
+      osx_image: xcode8  # currently xcode8.1+ doesn't support electron-builder macOS code-signing (https://github.com/electron-userland/electron-builder/issues/820#issuecomment-267777060)
+      node_js: 6
+      env:
           - GULP_PLATFORM=mac
-        before_install:
-          - npm install -g yarn
-     - os: linux
-        dist: trusty
-        node_js: 6
-   allow_failures:
-      - os: osx
 
-   fast_finish: true
+  allow_failures:
+  - os: osx
+
+  fast_finish: true
+
+
 cache:
   directories:
   - node_modules
+
 services:
 - docker
 
