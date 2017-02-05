@@ -137,3 +137,9 @@ const GetGeth=(userpath, eventSender, cb)=>{
     })
 }
 exports.GetGeth=GetGeth;
+if(process.env.NODE_ENV==='test'){
+    exports.getPlatform=getPlatform;
+    exports.getHttp=getHttp;
+    exports.getGethPackage=getGethPackage;
+    exports.extractGethPackage=extractGethPackage;
+}

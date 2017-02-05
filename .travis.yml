@@ -33,7 +33,7 @@ before_install:
 - npm install
 - "./buildhtml.sh"
 script: 
-- if [[ $TRAVIS_OS_NAME == "linux" ]]; then npm test -- --coverage; fi;
+- if [[ $TRAVIS_OS_NAME == "linux" ]]; then npm test -- --coverage --config=jest.config.json; fi;
 - if [[ $TRAVIS_OS_NAME == "linux" ]]; then ./install.sh; fi;
 - if [[ $TRAVIS_OS_NAME == "osx" ]]; then npm run distMac; fi;
 

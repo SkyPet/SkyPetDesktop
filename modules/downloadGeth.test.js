@@ -1,6 +1,8 @@
 var assert = require('assert');
 var rewire = require('rewire');
-var downloadGeth=rewire('./modules/downloadGeth')
+process.env.NODE_ENV = 'test';
+//var downloadGeth=rewire('./modules/downloadGeth')
+var downloadGeth=require('./downloadGeth')
 const fs = require("fs-extra");
 const testFolder='tmpTestFolder';
 afterAll(() => {
@@ -13,7 +15,8 @@ beforeEach(() => {
   fs.remove(testFolder);
 })
 describe('#getPlatform', function() {
-  var getPlatform= downloadGeth.__get__("getPlatform");
+  var getPlatform=downloadGeth.getPlatform;
+  //var getPlatform= downloadGeth.__get__("getPlatform");
   it('should return "win" if process.platform=="win32"', ()=>{
     expect(getPlatform('win32')).toEqual('win');
   });
@@ -28,7 +31,8 @@ describe('#getPlatform', function() {
   }); 
 });
 describe('#getHttp', function() {
-  var getHttp= downloadGeth.__get__("getHttp");
+  //var getHttp= downloadGeth.__get__("getHttp");
+  var getHttp=downloadGeth.getHttp;
   it('should return no error if successful', (done)=>{
     getHttp('https://raw.githubusercontent.com/ethereum/mist/master/clientBinaries.json', (err, result)=>{
       expect(err).toEqual(null);
@@ -45,7 +49,8 @@ describe('#getHttp', function() {
   });
 });
 describe('#getGethPackage', function() {
-  var getGethPackage= downloadGeth.__get__("getGethPackage");
+  //var getGethPackage= downloadGeth.__get__("getGethPackage");
+  var getGethPackage=downloadGeth.getGethPackage;
   it('should return that folder doesnt exist', (done)=>{
     getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.tar.gz', type:'tar'}, './'+testFolder, (err, result)=>{
       expect(err.toString()).toEqual("Error: ENOENT: no such file or directory, stat './tmpTestFolder'");
@@ -73,8 +78,10 @@ describe('#getGethPackage', function() {
 
 
 describe('#extractGethPackage', function() {
-  var getGethPackage= downloadGeth.__get__("getGethPackage");
-  var extractGethPackage= downloadGeth.__get__("extractGethPackage");
+  var getGethPackage=downloadGeth.getGethPackage;
+  var extractGethPackage=downloadGeth.extractGethPackage;
+  //var getGethPackage= downloadGeth.__get__("getGethPackage");
+  //var extractGethPackage= downloadGeth.__get__("extractGethPackage");
   it('should extract tar', (done)=>{
     const tp='tar';
     fs.mkdir(testFolder, (err, result)=>{
