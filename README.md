@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/SkyPet/SkyPetDesktop.svg?branch=master)](https://travis-ci.org/SkyPet/SkyPetDesktop)
+[![codecov](https://codecov.io/gh/SkyPet/SkyPetDesktop/branch/master/graph/badge.svg)](https://codecov.io/gh/SkyPet/SkyPetGUI)
 ##Skypet Electron
 This package uses the Skypet GUI repository for the html.  There are a number of scripts to run to get everything in order.  First, run 
 
