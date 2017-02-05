@@ -31,7 +31,7 @@
 		"electron-config": "^0.2.1",
 		"skypetwrapper": "^1.2.0",
 		"fs-extra": "^2.0.0",
-		"node-zip": "^1.1.1",
+		"unzip": "^0.1.11",
 		"tar.gz": "^1.0.5"
 	},
 	"devDependencies": {

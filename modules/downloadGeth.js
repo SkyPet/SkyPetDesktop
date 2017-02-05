@@ -1,7 +1,7 @@
 const https=require('https');
 const path=require('path');
 const fs=require('fs-extra');
-const nodeZip=require('node-zip');
+const nodeZip=require('unzip');
 const targz=require('tar.gz');
 
 const zipUtils={
@@ -51,27 +51,38 @@ const getHttp=(url, cb)=>{
     });
 }
 const getGethPackage=(meta, gethFolder, cb)=>{
-    const archivePath=path.join(gethFolder, `myTmpGeth.${zipUtils[meta.type]}`); //downloaded from internet
-    const archiveStream = fs.createWriteStream(archivePath);
-    const gethStream = fs.createReadStream(archivePath);
-    const request = https.get(meta.url, (response)=>{
-        response.pipe(archiveStream);
-        archiveStream.on('finish', ()=>{
-            archiveStream.close(()=>{
-                cb(null, archivePath);
-            });  // close() is async, call cb after close completes.
+    fs.stat(gethFolder, (err, stats)=>{
+        if (err) {
+            return cb(err, null);
+        }
+        if (!stats.isDirectory()) {
+            return cb("Not a directory", null);
+        } 
+        const archivePath=path.join(gethFolder, `myTmpGeth.${zipUtils[meta.type]}`); //downloaded from internet
+        const archiveStream = fs.createWriteStream(archivePath);
+        const request = https.get(meta.url, (response)=>{
+            response.pipe(archiveStream);
+            archiveStream.on('error', (err)=>{
+                console.log(err);
+            })
+            archiveStream.on('finish', ()=>{
+                archiveStream.close(()=>{
+                    cb(null, archivePath);
+                });  // close() is async, call cb after close completes.
+            });
+        }).on('error', (err)=>{
+            fs.unlink(archivePath);
+            fs.remove(gethFolder);
+            cb(err, null);
         });
-    }).on('error', (err)=>{
-        fs.unlink(archivePath);
-        fs.remove(gethFolder);
-        cb(err, null);
     });
 }
 const extractGethPackage=(meta, gethFolder, archivePath, cb)=>{
     if(meta.type==='zip'){
+        const gethStream = fs.createReadStream(archivePath);
         const extArch=nodeZip.Extract({path:gethFolder}).on('error', (err)=>{
             cb(err, null);
-        }).on('end', ()=>{
+        }).on('close', ()=>{
             cb(null, "done");
         })
         gethStream.on('error', (err)=>{
@@ -101,7 +112,7 @@ const gethJson="https://raw.githubusercontent.com/ethereum/mist/master/clientBin
 const GetGeth=(userpath, eventSender, cb)=>{
     const myPlatform=getPlatform();
     if(!myPlatform){
-        return cb("Platform not supported", null);
+        return cb("Operating System not supported", null);
     }
     doesBinaryAlreadyExist(userpath, (err, fullFolder)=>{
         if(err&&!process.env.FORCE_GETH_UPDATE){
