@@ -47,11 +47,6 @@ function SkyPetApi(event, globalevent, gethBinary){
             closeGeth(geth);
         }
     }
-    
-    //Dont expose this to the public.  Private only!
-    //event.on('startEthereum', (event, arg)=>{
-        
-    //})
     event.on('password', (event, arg)=>{
         getAccounts((err, result)=>{
             return err?createAccount(arg, (err, result)=>{
