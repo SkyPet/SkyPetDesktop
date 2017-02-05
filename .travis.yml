@@ -35,13 +35,13 @@ before_install:
 install:
   - npm install -g codecov
 script: 
-- if [[ $TRAVIS_OS_NAME == "linux" ]]; npm test -- --coverage; fi;
-- if [[ $TRAVIS_OS_NAME == "linux" ]]; codecov; fi;
+- if [[ $TRAVIS_OS_NAME == "linux" ]]; then npm test -- --coverage; fi;
+- if [[ $TRAVIS_OS_NAME == "linux" ]]; then codecov; fi;
 - if [[ $TRAVIS_OS_NAME == "linux" ]]; then ./install.sh; fi;
 - if [[ $TRAVIS_OS_NAME == "osx" ]]; then npm run distMac; fi;
 
 after_success:
-  - if [[ $TRAVIS_OS_NAME == "linux" ]]; bash <(curl -s https://codecov.io/bash); fi;  
+  - if [[ $TRAVIS_OS_NAME == "linux" ]]; then bash <(curl -s https://codecov.io/bash); fi;  
 
 deploy:
   provider: releases
