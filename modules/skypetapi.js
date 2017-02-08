@@ -35,9 +35,9 @@ function SkyPetApi(event, globalevent, gethBinary){
                     event.send("moneyInAccount", balance);
                 })
                 event.send("account", account);
-                event.send("sync", {currentProgress:100, isSyncing:false});
             }
         })
+        event.send("sync", {currentProgress:100, isSyncing:false});
         getCost(contract, (err, result)=>{
             err?"":event.send("cost", result);
         })
