@@ -33,7 +33,7 @@ const getPlatform=(sysPlatform=process.platform)=>{
     return currPlatform.length>0?currPlatform[0].geth:null;
 }
 const doesBinaryAlreadyExist=(userpath, cb)=>{
-    const gethPath=path.join(userpath, '/geth');
+    const gethPath=path.join(userpath, 'geth');
     fs.mkdir(gethPath, (err, result)=>{cb(err, gethPath)});
 }
 const getHttp=(url, cb)=>{

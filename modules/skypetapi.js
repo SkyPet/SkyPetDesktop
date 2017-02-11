@@ -49,9 +49,6 @@ function SkyPetApi(event, globalevent, gethBinary){
     }
     event.on('password', (event, arg)=>{
         getAccounts((err, result)=>{
-            console.log("at 52");
-            console.log(err);
-            console.log(result);
             return err?createAccount(arg, (err, result)=>{
                 returnSuccessError(event, err, result);
             }):checkPassword(arg, (err, result)=>{

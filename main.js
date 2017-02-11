@@ -7,11 +7,6 @@ const shell=electron.shell;
 const ipcMain=electron.ipcMain;
 let SkyPetApi;
 
-//process.env.binaryPath="ethBinaries";
-//process.env.gethProduction=true;
-//process.env.gethPath='/';
-
-
 let menu;
 let template;
 let mainWindow = null;
