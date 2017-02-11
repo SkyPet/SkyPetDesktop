@@ -33,26 +33,32 @@ const getPlatform=(sysPlatform=process.platform)=>{
 	log.info('Platform ', JSON.stringify(currPlatform[0]));
     return currPlatform.length>0?currPlatform[0].geth:null;
 }
+/**Creates path to {SkyPetDirectory}/geth if it doesn't already exist */
 const doesBinaryAlreadyExist=(userpath, cb)=>{
     const gethPath=path.join(userpath, 'geth');
 	log.info('Geth Path ', gethPath);
     fs.mkdir(gethPath, (err, result)=>{cb(err, gethPath)});
 }
+/**Get JSON from url.  If the result isn't json then it returns an error */
 const getHttp=(url, cb)=>{
     https.get(url, (res)=>{
         let rawData = '';
         res.on('data', (chunk) => rawData += chunk);
+        res.on('error', (err)=>{
+            log.error(err);
+            return cb(err, null);
+        });
         res.on('end', () => {
-			log.info('Http received');
+			log.info('Http received from ', url);
             try{
                 cb(null, JSON.parse(rawData));
             }catch(e){
                 cb(e, null);
             }
-            //.clients.Geth.platforms[myPlatform].x64.download;
         });
     });
 }
+/**Download archive from the url provided in the "meta" object and save it locally */
 const getGethPackage=(meta, gethFolder, cb)=>{
     fs.stat(gethFolder, (err, stats)=>{
         if (err) {
@@ -68,15 +74,16 @@ const getGethPackage=(meta, gethFolder, cb)=>{
 			log.info('Response parsed');
             response.pipe(archiveStream);
             archiveStream.on('error', (err)=>{
+                log.error(err);
                 console.log(err);
             })
             archiveStream.on('finish', ()=>{
                 archiveStream.close(()=>{
                     cb(null, archivePath);
-                });  // close() is async, call cb after close completes.
+                }); 
             });
         }).on('error', (err)=>{
-			log.info('HTTP request error ', err);
+			log.error('Error downloading online archive ', err);
             fs.unlink(archivePath);
             fs.remove(gethFolder);
             cb(err, null);
@@ -121,6 +128,23 @@ const getBinaryFromExtract=(meta, gethFolder, cb)=>{
     });
 }
 
+const checkFolder=(fullFolder, eventSender, cb, onNoFile)=>{
+    fs.readdir(fullFolder, (err, files)=>{
+        console.log(err);
+        console.log(files);
+        if(files.length===0){
+            log.info("Geth doesn't exist, continuing to download");
+            onNoFile();
+        }
+        else{
+            eventSender.send("info", "Launching Geth...");
+            log.info("Geth already exists")
+            log.info("Geth path ", fullFolder);
+            log.info("Geth binary ", files[0]);
+            cb(null, path.join(fullFolder,files[0]));
+        }
+    });
+}
 const gethJson="https://raw.githubusercontent.com/ethereum/mist/master/clientBinaries.json";
 const GetGeth=(userpath, eventSender, cb)=>{
     const myPlatform=getPlatform();
@@ -128,38 +152,38 @@ const GetGeth=(userpath, eventSender, cb)=>{
         return cb("Operating System not supported", null);
     }
     doesBinaryAlreadyExist(userpath, (err, fullFolder)=>{
-        if(err&&!process.env.FORCE_GETH_UPDATE){
-            fs.readdir(fullFolder, (err, files)=>{
-				if(files.length===0){
-					log.error("Geth doesn't exist!");
-					return cb(err, null);
-				}
-				eventSender.send("info", "Launching Geth...");
-				log.info("Geth already exists")
-				log.info("Geth path ", fullFolder);
-				log.info("Geth binary ", files[0]);
-				cb(null, path.join(fullFolder,files[0]));
-                //cb(null, path.join(fullFolder,files[0]));
-            });
-            return;
+        const wrapper=()=>{
+            getHttp(gethJson, (err, data)=>{
+                if(err){
+                    log.error(err)
+                    return cb(err, null);
+                }
+                const firstTimeMessage="Setting up for first use: ";
+                eventSender.send("info", `${firstTimeMessage} Binary Downloading...`);
+                log.info("Retreived json ", data)
+                const metaResults=data.clients.Geth.platforms[myPlatform].x64.download;
+                cb(null, metaResults);
+            })
         }
-        getHttp(gethJson, (err, data)=>{
-            const firstTimeMessage="Setting up for first use: ";
-            eventSender.send("info", `${firstTimeMessage} Binary Downloading...`);
-            const metaResults=data.clients.Geth.platforms[myPlatform].x64.download;
-            getGethPackage(metaResults, fullFolder, (err, archive)=>{
-                eventSender.send("info", `${firstTimeMessage} Binary Extracting...`);
-                return err?cb(err, fullFolder):extractGethPackage(metaResults, fullFolder, archive, (err, results)=>{
-                    err?log.error(err):eventSender.send("info", "Launching Geth...");
-                    return err?cb(err, null):getBinaryFromExtract(metaResults, fullFolder, cb);
+
+            /*getMetaData(gethJson, eventSender, (err, meta)=>{
+                return err?cb(err, null):
+                getGethPackage(meta, fullFolder, (err, archive)=>{
+                    eventSender.send("info", `${firstTimeMessage} Binary Extracting...`);
+                    return err?cb(err, fullFolder):extractGethPackage(metaResults, fullFolder, archive, (err, results)=>{
+                        err?log.error(err):eventSender.send("info", "Launching Geth...");
+                        return err?cb(err, null):getBinaryFromExtract(metaResults, fullFolder, cb);
+                    })
                 })
-            });
-        })
+            })
+        }*/
+        err&&!process.env.FORCE_GETH_UPDATE?checkFolder(fullFolder, eventSender, cb, wrapper):wrapper();
     })
 }
 exports.GetGeth=GetGeth;
 if(process.env.NODE_ENV==='test'){
     exports.getPlatform=getPlatform;
+    exports.checkFolder=checkFolder;
     exports.getHttp=getHttp;
     exports.getGethPackage=getGethPackage;
     exports.extractGethPackage=extractGethPackage;

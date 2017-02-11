@@ -1,19 +1,17 @@
 var assert = require('assert');
-var rewire = require('rewire');
 process.env.NODE_ENV = 'test';
 //var downloadGeth=rewire('./modules/downloadGeth')
 var downloadGeth=require('./downloadGeth')
 const fs = require("fs-extra");
-const testFolder='tmpTestFolder';
+
 afterAll(() => {
-  fs.remove(testFolder);
+  fs.readdir('.', (err, files)=>{
+    files.filter((val)=>{return val.startsWith('tmp');}).map((val)=>{
+      fs.remove(val);
+    });
+  })
 })
-afterEach(() => {
-  fs.remove(testFolder);
-})
-beforeEach(() => {
-  fs.remove(testFolder);
-})
+
 describe('#getPlatform', function() {
   var getPlatform=downloadGeth.getPlatform;
   //var getPlatform= downloadGeth.__get__("getPlatform");
@@ -49,46 +47,87 @@ describe('#getHttp', function() {
   });
 });
 describe('#getGethPackage', function() {
-  //var getGethPackage= downloadGeth.__get__("getGethPackage");
   var getGethPackage=downloadGeth.getGethPackage;
   it('should return that folder doesnt exist', (done)=>{
+    const testFolder='tmpGetGethPackage';
     getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.tar.gz', type:'tar'}, './'+testFolder, (err, result)=>{
-      expect(err.toString()).toEqual("Error: ENOENT: no such file or directory, stat './tmpTestFolder'");
+      expect(err.toString()).toEqual(`Error: ENOENT: no such file or directory, stat './${testFolder}'`);
       done()
     })
   });
   it('should write to tar', (done)=>{
+    const testFolder='tmpGetGethPackage1';
     fs.mkdir(testFolder, (err, result)=>{
       getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.tar.gz', type:'tar'}, './'+testFolder, (err, archivePath)=>{
         expect(archivePath).toEqual(`${testFolder}/myTmpGeth.tar.gz`);
+        fs.remove(testFolder);
         done();
       })
     });
+    
   });
   it('should write to zip', (done)=>{
+    const testFolder='tmpGetGethPackage2';
     fs.mkdir(testFolder, (err, result)=>{
       console.log(err);
       getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.zip', type:'zip'}, './'+testFolder, (err, archivePath)=>{
         expect(archivePath).toEqual(`${testFolder}/myTmpGeth.zip`);
+        fs.remove(testFolder);
         done();
       })
     });
+    
   });
 });
 
 
+describe('#checkFolder', function() {
+  var checkFolder=downloadGeth.checkFolder;
+  var tmpSender={
+    send:(var1, var2)=>{
+    }
+  }
+  it('should return that files dont exist', (done)=>{
+    const testFolder='tmpCheckFolder1';
+    fs.mkdir(testFolder, (err, res)=>{
+      checkFolder('./'+testFolder, tmpSender, (err, res)=>{
+        //console.log(res);
+        //expect("tobehere").toEqual("tobehere");done();
+        fs.remove(testFolder);
+        done(new Error("Shouldn't get here"))
+      }, 
+      ()=>{expect("tobehere").toEqual("tobehere");fs.remove(testFolder);done();}
+      )
+    })
+  });
+  it('should return the file created', (done)=>{
+    const testFolder='tmpCheckFolder2';
+    fs.mkdir(testFolder, (err, res)=>{
+      fs.writeFile('./'+testFolder+'/myFile.txt', 'helloworld', (err)=>{
+        console.log(err);
+        checkFolder('./'+testFolder, tmpSender, (err, res)=>{
+          expect(res).toEqual(testFolder+'/myFile.txt');
+          fs.remove(testFolder);
+          done();
+        }, ()=>{fs.remove(testFolder);done(new Error("Shouldn't get here"));});//done(new Error("Shouldn't get here"))});
+      });
+    })
+  });
+});
+
 describe('#extractGethPackage', function() {
+  
   var getGethPackage=downloadGeth.getGethPackage;
   var extractGethPackage=downloadGeth.extractGethPackage;
-  //var getGethPackage= downloadGeth.__get__("getGethPackage");
-  //var extractGethPackage= downloadGeth.__get__("extractGethPackage");
   it('should extract tar', (done)=>{
     const tp='tar';
+    const testFolder='tmpExtractGethPackage1';
     fs.mkdir(testFolder, (err, result)=>{
       getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.tar.gz', type:tp}, './'+testFolder, (err, archivePath)=>{
         extractGethPackage({type:tp}, './'+testFolder, archivePath, (err, result)=>{
           fs.readFile('./'+testFolder+'/helloworld.txt', (err, data) => {
             expect(data.toString().trim()).toEqual("hello world");
+            fs.remove(testFolder);
             done();
           });
         })
@@ -97,12 +136,14 @@ describe('#extractGethPackage', function() {
   });
   it('should extract zip', (done)=>{
     const tp='zip';
+    const testFolder='tmpExtractGethPackage2';
     fs.mkdir(testFolder, (err, result)=>{
       console.log(err);
       getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.zip', type:tp}, './'+testFolder, (err, archivePath)=>{
         extractGethPackage({type:tp}, './'+testFolder, archivePath, (err, result)=>{
           fs.readFile('./'+testFolder+'/helloworld.txt', (err, data) => {
             expect(data.toString().trim()).toEqual("hello world");
+            fs.remove(testFolder);
             done();
           });
         })
