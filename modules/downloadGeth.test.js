@@ -1,6 +1,5 @@
 var assert = require('assert');
 process.env.NODE_ENV = 'test';
-//var downloadGeth=rewire('./modules/downloadGeth')
 var downloadGeth=require('./downloadGeth')
 const fs = require("fs-extra");
 

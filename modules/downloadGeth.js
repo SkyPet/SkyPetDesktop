@@ -165,18 +165,6 @@ const GetGeth=(userpath, eventSender, cb)=>{
                 cb(null, metaResults);
             })
         }
-
-            /*getMetaData(gethJson, eventSender, (err, meta)=>{
-                return err?cb(err, null):
-                getGethPackage(meta, fullFolder, (err, archive)=>{
-                    eventSender.send("info", `${firstTimeMessage} Binary Extracting...`);
-                    return err?cb(err, fullFolder):extractGethPackage(metaResults, fullFolder, archive, (err, results)=>{
-                        err?log.error(err):eventSender.send("info", "Launching Geth...");
-                        return err?cb(err, null):getBinaryFromExtract(metaResults, fullFolder, cb);
-                    })
-                })
-            })
-        }*/
         err&&!process.env.FORCE_GETH_UPDATE?checkFolder(fullFolder, eventSender, cb, wrapper):wrapper();
     })
 }

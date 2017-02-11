@@ -10,14 +10,16 @@ let SkyPetApi;
 let menu;
 let template;
 let mainWindow = null;
+const path = require('path'); // eslint-disable-line
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support'); // eslint-disable-line
   sourceMapSupport.install();
+  
 }
 
 if (process.env.NODE_ENV === 'development') {
   require('electron-debug')(); // eslint-disable-line global-require
-  const path = require('path'); // eslint-disable-line
+  
   const p = path.join(__dirname, '..', 'app', 'node_modules'); // eslint-disable-line
   require('module').globalPaths.push(p); // eslint-disable-line
 }
@@ -40,12 +42,12 @@ app.on('ready', () => {
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();
     mainWindow.focus();
-    const GetGeth=require('./modules/downloadGeth').GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
+    
+    const GetGeth=require(path.resolve('.', 'modules', 'downloadGeth')).GetGeth(app.getPath('userData'),mainWindow.webContents,  (err, locationOfBinary)=>{
       if(!locationOfBinary){
-        //console.log(err);
         return app.quit();
       }
-      const skypet=require('./modules/skypetapi').SkyPetApi;//(ipcMain);
+      const skypet=require(path.resolve('.', 'modules', 'skypetapi')).SkyPetApi;//(ipcMain);
       SkyPetApi=new skypet(ipcMain, mainWindow.webContents, locationOfBinary);
     });
   });
