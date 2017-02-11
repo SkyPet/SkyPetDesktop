@@ -98,9 +98,9 @@ const extractGethPackage=(meta, gethFolder, archivePath, cb)=>{
 }
 
 const getBinaryFromExtract=(meta, gethFolder, cb)=>{
-    const srcFile=path.join(gethFolder, meta.bin);
-    const binaryName=path.basename(meta.bin);
-    const folderName=path.dirname(path.join(gethFolder, meta.bin));
+    const srcFile=path.normalize(path.join(gethFolder, meta.bin));
+    const binaryName=path.basename(srcFile);
+    const folderName=path.dirname(srcFile);
     const dstFile=path.join(gethFolder, binaryName);
     fs.copy(srcFile, dstFile, (err, result)=>{
         fs.remove(folderName);
