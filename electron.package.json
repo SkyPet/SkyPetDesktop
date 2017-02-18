@@ -1,6 +1,6 @@
 {
 	"name": "skypetdesktop",
-	"version": "0.0.30",
+	"version": "0.0.31",
 	"main": "main.js",
 	"description": "Desktop Application for SkyPet",
 	"author": "Daniel Stahl <danstahl1138@gmail.com>",
