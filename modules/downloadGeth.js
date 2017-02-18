@@ -132,8 +132,7 @@ const getBinaryFromExtract=(meta, gethFolder, cb)=>{
 const checkFolder=(fullFolder, eventSender, cb, onNoFile)=>{
     fs.readdir(fullFolder, (err, files)=>{
         console.log(err);
-        console.log(files);
-        if(files.length===0){
+        if(files&&files.length===0||!files){
             log.info("Geth doesn't exist, continuing to download");
             onNoFile();
         }
@@ -146,6 +145,7 @@ const checkFolder=(fullFolder, eventSender, cb, onNoFile)=>{
         }
     });
 }
+
 const gethJson="https://raw.githubusercontent.com/ethereum/mist/master/clientBinaries.json";
 const GetGeth=(userpath, eventSender, cb)=>{
     const myPlatform=getPlatform();
@@ -156,17 +156,24 @@ const GetGeth=(userpath, eventSender, cb)=>{
         const wrapper=()=>{
             getHttp(gethJson, (err, data)=>{
                 if(err){
-                    log.error(err)
+                    log.error(err);
                     return cb(err, null);
                 }
                 const firstTimeMessage="Setting up for first use: ";
                 eventSender.send("info", `${firstTimeMessage} Binary Downloading...`);
-                log.info("Retreived json ", data)
+                log.info("Retreived json");
                 const metaResults=data.clients.Geth.platforms[myPlatform].x64.download;
-                cb(null, metaResults);
-            })
+                log.info("Meta Results", JSON.stringify(metaResults));
+                getGethPackage(metaResults, fullFolder, (err, archive)=>{
+                    eventSender.send("info", `${firstTimeMessage} Binary Extracting...`);
+                    return err?cb(err, fullFolder):extractGethPackage(metaResults, fullFolder, archive, (err, results)=>{
+                        err?log.error(err):eventSender.send("info", "Launching Geth...");
+                        return err?cb(err, null):getBinaryFromExtract(metaResults, fullFolder, cb);
+                    });
+                });
+            });
         }
-        err&&!process.env.FORCE_GETH_UPDATE?checkFolder(fullFolder, eventSender, cb, wrapper):wrapper();
+        err&&!process.env.FORCE_GETH_UPDATE?checkFolder(fullFolder, eventSender, cb, wrapper):cb(null, fullFolder);
     })
 }
 exports.GetGeth=GetGeth;
