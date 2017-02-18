@@ -38,7 +38,7 @@
 	},
 	"dependencies": {
 		"electron-config": "^0.2.1",
-		"skypetwrapper": "^1.3.1",
+		"skypetwrapper": "^1.3.2",
 		"fs-extra": "^2.0.0",
 		"extract-zip": "^1.6.0",
 		"electron-log": "^1.3.0",
