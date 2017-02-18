@@ -14,7 +14,7 @@ const getMoneyInAccount=eth.getMoneyInAccount;
 const getSync=eth.getSync;
 
 const returnSuccessError=(event, err, result)=>{
-    return err?event.sender.send("passwordError", err):event.sender.send("successLogin", result);
+    return err?event.sender.send("passwordError", err.toString()):event.sender.send("successLogin", result);
 }
 function SkyPetApi(event, globalevent, gethBinary){
     let geth;
@@ -53,12 +53,12 @@ function SkyPetApi(event, globalevent, gethBinary){
                 returnSuccessError(event, err, result);
             }):checkPassword(arg, (err, result)=>{
                 returnSuccessError(event, err, result);
-            })
+            });
         });
     })
     event.on('addAttribute', (event, arg) => {
         contract?addAttribute(arg.password,arg.message, arg.hashId, contract, (err, result)=>{
-            err?event.sender.send("passwordError", err):event.sender.send("attributeAdded", true);
+            err?event.sender.send("passwordError", err.toString()):event.sender.send("attributeAdded", true);
         }):"";
     });
     event.on('id', (event, hashId)=>{
