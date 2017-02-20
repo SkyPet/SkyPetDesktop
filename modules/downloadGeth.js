@@ -131,8 +131,7 @@ const getBinaryFromExtract=(meta, gethFolder, cb)=>{
 
 const checkFolder=(fullFolder, eventSender, cb, onNoFile)=>{
     fs.readdir(fullFolder, (err, files)=>{
-        console.log(err);
-        if(files&&files.length===0||!files){
+        if(files.length===0){
             log.info("Geth doesn't exist, continuing to download");
             onNoFile();
         }
@@ -153,6 +152,7 @@ const GetGeth=(userpath, eventSender, cb)=>{
         return cb("Operating System not supported", null);
     }
     doesBinaryAlreadyExist(userpath, (err, fullFolder)=>{
+        console.log(err);
         const wrapper=()=>{
             getHttp(gethJson, (err, data)=>{
                 if(err){
