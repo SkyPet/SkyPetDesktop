@@ -38,7 +38,8 @@ const getPlatform=(sysPlatform=process.platform)=>{
 const doesBinaryAlreadyExist=(userpath, cb)=>{
     const gethPath=path.join(userpath, 'geth');
 	log.info('Geth Path ', gethPath);
-    fs.mkdir(gethPath, (err, result)=>{cb(err, gethPath)});
+    //errors if already exists
+    fs.mkdir(gethPath, (err, result)=>{cb(err?true:false, gethPath)});
 }
 /**Get JSON from url.  If the result isn't json then it returns an error */
 const getHttp=(url, cb)=>{
@@ -135,11 +136,16 @@ const checkFolder=(fullFolder, eventSender, cb, onNoFile)=>{
             log.info("Geth doesn't exist, continuing to download");
             onNoFile();
         }
+        else if(process.env.FORCE_GETH_UPDATE){
+            log.info("Geth exists, forcing download");
+            onNoFile();
+        }
         else{
             eventSender.send("info", "Launching Geth...");
             log.info("Geth already exists")
             log.info("Geth path ", fullFolder);
             log.info("Geth binary ", files[0]);
+            //log.info("Full path ", path.join(fullFolder,files[0]))
             cb(null, path.join(fullFolder,files[0]));
         }
     });
@@ -151,8 +157,7 @@ const GetGeth=(userpath, eventSender, cb)=>{
     if(!myPlatform){
         return cb("Operating System not supported", null);
     }
-    doesBinaryAlreadyExist(userpath, (err, fullFolder)=>{
-        console.log(err);
+    doesBinaryAlreadyExist(userpath, (alreadyExists, fullFolder)=>{
         const wrapper=()=>{
             getHttp(gethJson, (err, data)=>{
                 if(err){
@@ -173,7 +178,8 @@ const GetGeth=(userpath, eventSender, cb)=>{
                 });
             });
         }
-        err&&!process.env.FORCE_GETH_UPDATE?checkFolder(fullFolder, eventSender, cb, wrapper):cb(null, fullFolder);
+        //alreadyExists&&!process.env.FORCE_GETH_UPDATE?cb(null, fullFolder):
+        checkFolder(fullFolder, eventSender, cb, wrapper);
     })
 }
 exports.GetGeth=GetGeth;
