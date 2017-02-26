@@ -19,6 +19,7 @@ const returnSuccessError=(event, err, result)=>{
 function SkyPetApi(event, globalevent, gethBinary){
     let geth;
     let contract;
+    let account;
     getEthereumStart(gethBinary, (gethInstance)=>{
         geth=gethInstance;
         getSync((progress)=>{
@@ -29,12 +30,13 @@ function SkyPetApi(event, globalevent, gethBinary){
     });
     const syncHelper=(event)=>{
         contract=getContract(); 
-        getAccounts((err, account)=>{
+        getAccounts((err, acc)=>{
             if(!err){
-                getMoneyInAccount(account, (err, balance)=>{
+                account=acc;
+                getMoneyInAccount(acc, (err, balance)=>{
                     event.send("moneyInAccount", balance);
                 })
-                event.send("account", account);
+                event.send("account", acc);
             }
         })
         event.send("sync", {currentProgress:100, isSyncing:false});
@@ -50,6 +52,7 @@ function SkyPetApi(event, globalevent, gethBinary){
     event.on('password', (event, arg)=>{
         getAccounts((err, result)=>{
             return err?createAccount(arg, (err, result)=>{
+                account=result;
                 returnSuccessError(event, err, result);
             }):checkPassword(arg, (err, result)=>{
                 returnSuccessError(event, err, result);
@@ -57,7 +60,7 @@ function SkyPetApi(event, globalevent, gethBinary){
         });
     })
     event.on('addAttribute', (event, arg) => {
-        contract?addAttribute(arg.password,arg.message, arg.hashId, contract, (err, result)=>{
+        contract?addAttribute(account, arg.password,arg.message, arg.hashId, contract, (err, result)=>{
             err?event.sender.send("passwordError", err.toString()):event.sender.send("attributeAdded", true);
         }):"";
     });
@@ -65,7 +68,7 @@ function SkyPetApi(event, globalevent, gethBinary){
         contract?getAttributes(contract, hashId,  (err, attributes)=>{
             err?"":event.sender.send("retrievedData", attributes);
         }):"";
-        contract?watchContract(contract, hashId,  (err, attributes)=>{
+        contract?watchContract(account, contract, hashId,  (err, attributes)=>{
             err?"":event.sender.send("retrievedData", attributes);
         }, (err, balance)=>{
             err?"":event.sender.send("moneyInAccount", balance);
