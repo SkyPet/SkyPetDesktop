@@ -54,6 +54,7 @@ function SkyPetApi(event, globalevent, gethBinary){
             return err?createAccount(arg, (err, result)=>{
                 account=result;
                 returnSuccessError(event, err, result);
+                event.sender.send("account", result);
             }):checkPassword(arg, (err, result)=>{
                 returnSuccessError(event, err, result);
             });
