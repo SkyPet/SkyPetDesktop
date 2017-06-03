@@ -143,6 +143,7 @@ describe('#extractGethPackage', function() {
           if(err){
             throw err
           }
+          console.log(result)
           fs.readFile('./'+testFolder+'/helloworld.txt', (err, data) => {
             if(err){
               throw err
