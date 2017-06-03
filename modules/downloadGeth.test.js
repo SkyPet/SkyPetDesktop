@@ -141,6 +141,9 @@ describe('#extractGethPackage', function() {
       getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.zip', type:tp}, './'+testFolder, (err, archivePath)=>{
         extractGethPackage({type:tp}, './'+testFolder, archivePath, (err, result)=>{
           fs.readFile('./'+testFolder+'/helloworld.txt', (err, data) => {
+            if(err){
+              throw err
+            }
             expect(data.toString().trim()).toEqual("hello world");
             fs.remove(testFolder);
             done();
