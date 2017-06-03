@@ -140,6 +140,9 @@ describe('#extractGethPackage', function() {
       console.log(err);
       getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.zip', type:tp}, './'+testFolder, (err, archivePath)=>{
         extractGethPackage({type:tp}, './'+testFolder, archivePath, (err, result)=>{
+          if(err){
+            throw err
+          }
           fs.readFile('./'+testFolder+'/helloworld.txt', (err, data) => {
             if(err){
               throw err
