@@ -2,7 +2,7 @@ var assert = require('assert');
 process.env.NODE_ENV = 'test';
 var downloadGeth=require('./downloadGeth')
 const fs = require("fs-extra");
-
+const path = require('path');
 afterAll(() => {
   fs.readdir('.', (err, files)=>{
     files.filter((val)=>{return val.startsWith('tmp');}).map((val)=>{
@@ -138,13 +138,13 @@ describe('#extractGethPackage', function() {
     const testFolder='tmpExtractGethPackage2';
     fs.mkdir(testFolder, (err, result)=>{
       console.log(err);
-      getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.zip', type:tp}, './'+testFolder, (err, archivePath)=>{
-        extractGethPackage({type:tp}, './'+testFolder, archivePath, (err, result)=>{
+      getGethPackage({url:'https://raw.githubusercontent.com/SkyPet/UnitTestHelpers/master/helloworld.txt.zip', type:tp}, path.resolve('./', testFolder), (err, archivePath)=>{
+        extractGethPackage({type:tp}, path.resolve('./', testFolder), archivePath, (err, result)=>{
           if(err){
             throw err
           }
           console.log(result)
-          fs.readFile('./'+testFolder+'/helloworld.txt', (err, data) => {
+          fs.readFile(path.resolve('./', testFolder, 'helloworld.txt'), (err, data) => {
             if(err){
               throw err
             }
